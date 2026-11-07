@@ -1,89 +1,136 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AutoRent Pro — Sistem Manajemen Rental Mobil</title>
   <meta name="theme-color" content="#0C0D12">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2314161F'/%3E%3Cpath d='M20 65 L30 35 L70 35 L80 65 Z' fill='%23E5B842'/%3E%3Ccircle cx='35' cy='68' r='10' fill='%23F7D87E'/%3E%3Ccircle cx='65' cy='68' r='10' fill='%23F7D87E'/%3E%3C/svg%3E">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2314161F'/%3E%3Cpath d='M20 65 L30 35 L70 35 L80 65 Z' fill='%23E5B842'/%3E%3Ccircle cx='35' cy='68' r='10' fill='%23F7D87E'/%3E%3Ccircle cx='65' cy='68' r='10' fill='%23F7D87E'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       TOKEN WARNA & GAYA: LUXURY DARK OBSIDIAN & GOLD ACCENTS (NO EMOJI)
+       TOKEN WARNA & GAYA RINGAN: LUXURY DARK OBSIDIAN & GOLD ACCENTS (NO EMOJI)
+       Optimalisasi Performa Tinggi & Responsif
        ========================================================================== */
     :root {
       color-scheme: dark;
       --bg: #0C0D12;
       --bg-surface: #14161F;
-      --bg-card: #181B26;
-      --bg-card-hover: #222636;
+      --bg-card: #171A24;
+      --bg-card-hover: #1F2330;
       --bg-inset: #090A0E;
-      
+
       --ink: #F9FAFB;
       --mute: #9CA3AF;
       --dim: #6B7280;
-      
+
       /* Palet Emas */
       --gold: #E5B842;
       --gold-light: #F7D87E;
       --gold-dark: #B88E28;
-      --gold-glow: rgba(229, 184, 66, 0.28);
-      --gold-soft: rgba(229, 184, 66, 0.12);
+      --gold-glow: rgba(229, 184, 66, 0.2);
+      --gold-soft: rgba(229, 184, 66, 0.1);
       --gold-grad: linear-gradient(135deg, #FCE59F 0%, #E5B842 50%, #B88E28 100%);
-      --gold-border: rgba(229, 184, 66, 0.24);
-      --gold-border-focus: rgba(229, 184, 66, 0.6);
+      --gold-border: rgba(229, 184, 66, 0.22);
+      --gold-border-focus: rgba(229, 184, 66, 0.55);
 
-      /* Status Operasional */
+      /* Status */
       --ok: #10B981;
-      --ok-soft: rgba(16, 185, 129, 0.14);
+      --ok-soft: rgba(16, 185, 129, 0.12);
       --warn: #F59E0B;
-      --warn-soft: rgba(245, 158, 11, 0.14);
+      --warn-soft: rgba(245, 158, 11, 0.12);
       --bad: #EF4444;
-      --bad-soft: rgba(239, 68, 68, 0.14);
-      --info: #3B82F6;
-      --info-soft: rgba(59, 130, 246, 0.14);
+      --bad-soft: rgba(239, 68, 68, 0.12);
 
-      /* Efek Bayangan & Bevel Gelap */
-      --raise: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--gold-border);
-      --raise-s: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(229, 184, 66, 0.16);
-      --raise-glow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 18px var(--gold-glow), 0 0 0 1px var(--gold-border);
-      --inset: inset 2px 2px 6px rgba(0, 0, 0, 0.8), inset -1px -1px 3px rgba(229, 184, 66, 0.05);
+      /* Bayangan Ringan */
+      --raise: 0 4px 16px rgba(0, 0, 0, 0.45);
+      --raise-s: 0 2px 8px rgba(0, 0, 0, 0.35);
+      --inset: inset 1px 1px 4px rgba(0, 0, 0, 0.7);
 
       --f-head: 'Cinzel', serif;
       --f-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font: 500 15px/1.6 var(--f-body);
+      font: 500 15px/1.55 var(--f-body);
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    h1, h2, h3, h4 {
+    h1,
+    h2,
+    h3,
+    h4 {
       margin: 0;
       line-height: 1.25;
       color: var(--ink);
     }
-    h1, h2 { font-family: var(--f-head); letter-spacing: 0.02em; }
-    h1 { font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 700; }
-    h2 { font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700; }
-    h3 { font-size: 1.15rem; font-weight: 700; }
-    h4 { font-size: 1rem; font-weight: 600; }
 
-    p { margin: 0; }
-    a { color: var(--gold-light); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    small, .muted { color: var(--mute); font-size: 0.85rem; }
+    h1,
+    h2 {
+      font-family: var(--f-head);
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 2.8vw, 1.6rem);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    h4 {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    small,
+    .muted {
+      color: var(--mute);
+      font-size: 0.85rem;
+    }
+
     .gold-text {
       background: var(--gold-grad);
       -webkit-background-clip: text;
@@ -92,47 +139,100 @@
     }
 
     /* Utilitas Layout */
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
-    .stack > * + * { margin-top: 18px; }
-    .row { display: flex; align-items: center; flex-wrap: wrap; }
-    .gap-s { gap: 8px; }
-    .gap { gap: 14px; }
-    .gap-l { gap: 24px; }
-    .between { justify-content: space-between; }
-    .center { align-items: center; justify-content: center; }
-    .grid { display: grid; gap: 18px; }
-    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-    .hide { display: none !important; }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 18px;
+      width: 100%;
+    }
 
-    /* Komponen Kartu & Permukaan */
+    .stack>*+* {
+      margin-top: 16px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .gap-s {
+      gap: 8px;
+    }
+
+    .gap {
+      gap: 12px;
+    }
+
+    .gap-l {
+      gap: 20px;
+    }
+
+    .between {
+      justify-content: space-between;
+    }
+
+    .center {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    /* Kartu & Permukaan */
     .card {
       background: var(--bg-card);
-      border-radius: 18px;
+      border-radius: 16px;
       box-shadow: var(--raise);
-      padding: 22px;
+      padding: 20px;
       position: relative;
       border: 1px solid var(--gold-border);
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      border-color: rgba(229, 184, 66, 0.4);
-    }
-    .card.sm { padding: 14px 18px; border-radius: 14px; box-shadow: var(--raise-s); }
-    .card-highlight {
-      background: linear-gradient(145deg, rgba(229,184,66,0.08) 0%, rgba(20,22,31,0.95) 100%);
-      box-shadow: var(--raise-glow);
-    }
-    .inset {
-      background: var(--bg-inset);
-      border-radius: 14px;
-      box-shadow: var(--inset);
-      padding: 14px 18px;
-      border: 1px solid rgba(255,255,255,0.04);
+      transition: border-color 0.15s;
     }
 
-    /* Tombol Interaktif */
+    .card:hover {
+      border-color: rgba(229, 184, 66, 0.38);
+    }
+
+    .card.sm {
+      padding: 14px 16px;
+      border-radius: 12px;
+      box-shadow: var(--raise-s);
+    }
+
+    .card-highlight {
+      background: linear-gradient(145deg, rgba(229, 184, 66, 0.06) 0%, rgba(20, 22, 31, 0.98) 100%);
+      border-color: var(--gold);
+    }
+
+    .inset {
+      background: var(--bg-inset);
+      border-radius: 12px;
+      box-shadow: var(--inset);
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* Tombol */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -144,146 +244,193 @@
       background: var(--bg-surface);
       color: var(--ink);
       font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 12px;
-      min-height: 44px;
-      font-size: 0.92rem;
+      padding: 9px 18px;
+      border-radius: 10px;
+      min-height: 42px;
+      font-size: 0.9rem;
       transition: all 0.15s ease-in-out;
-      box-shadow: var(--raise-s);
       user-select: none;
     }
+
     .btn:hover {
       background: var(--bg-card-hover);
       border-color: var(--gold-light);
-      transform: translateY(-1px);
     }
+
     .btn:active {
-      transform: none;
-      box-shadow: var(--inset);
+      transform: translateY(1px);
     }
+
     .btn.primary {
       background: var(--gold-grad);
       color: #121008;
       border: 1px solid var(--gold-light);
-      box-shadow: 0 4px 18px var(--gold-glow);
     }
+
     .btn.primary:hover {
-      box-shadow: 0 6px 24px rgba(229, 184, 66, 0.45);
       filter: brightness(1.06);
     }
-    .btn.primary:active {
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
-    }
+
     .btn.danger {
       background: var(--bad-soft);
       color: var(--bad);
-      border-color: rgba(239, 68, 68, 0.4);
+      border-color: rgba(239, 68, 68, 0.35);
     }
+
     .btn.danger:hover {
-      background: rgba(239, 68, 68, 0.25);
+      background: rgba(239, 68, 68, 0.22);
     }
+
     .btn.sm {
-      min-height: 36px;
-      padding: 6px 14px;
-      font-size: 0.84rem;
-      border-radius: 10px;
+      min-height: 34px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      border-radius: 8px;
     }
-    .btn.block { width: 100%; }
+
+    .btn.block {
+      width: 100%;
+    }
+
     .btn[disabled] {
       opacity: 0.45;
       pointer-events: none;
-    }
-
-    /* SVG Icons Utility */
-    .svg-icon {
-      width: 18px;
-      height: 18px;
-      stroke-width: 2;
-      stroke: currentColor;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
     }
 
     /* Badge & Tag */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
+      gap: 4px;
+      padding: 3px 9px;
       border-radius: 999px;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
-    .b-ready { background: var(--ok-soft); color: var(--ok); border: 1px solid rgba(16,185,129,0.3); }
-    .b-rented { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
-    .b-service { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(239,68,68,0.3); }
-    .b-gold { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); }
+
+    .b-ready {
+      background: var(--ok-soft);
+      color: var(--ok);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .b-rented {
+      background: var(--warn-soft);
+      color: var(--warn);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .b-service {
+      background: var(--bad-soft);
+      color: var(--bad);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .b-gold {
+      background: var(--gold-soft);
+      color: var(--gold-light);
+      border: 1px solid var(--gold-border);
+    }
 
     /* Input & Form */
-    label.f { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 4px; color: var(--ink); }
-    label.f > span { display: block; margin-bottom: 6px; }
-    .in, select.in, textarea.in {
+    label.f {
+      display: block;
+      font-weight: 600;
+      font-size: 0.86rem;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    label.f>span {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .in,
+    select.in,
+    textarea.in {
       width: 100%;
       border: 1px solid rgba(229, 184, 66, 0.2);
       background: var(--bg-inset);
       color: var(--ink);
-      border-radius: 12px;
-      padding: 10px 14px;
-      min-height: 44px;
+      border-radius: 10px;
+      padding: 9px 12px;
+      min-height: 42px;
       font: inherit;
       box-shadow: var(--inset);
-      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .in:focus, select.in:focus, textarea.in:focus {
+
+    .in:focus,
+    select.in:focus,
+    textarea.in:focus {
       outline: none;
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-glow);
     }
-    textarea.in { min-height: 80px; resize: vertical; }
-    .in::placeholder { color: var(--dim); }
 
-    /* Pilihan Radio Kartu (Paket Sewa) */
-    .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-    .opt { position: relative; cursor: pointer; display: block; }
-    .opt input { position: absolute; opacity: 0; inset: 0; }
-    .opt > span {
+    textarea.in {
+      min-height: 75px;
+      resize: vertical;
+    }
+
+    .in::placeholder {
+      color: var(--dim);
+    }
+
+    /* Pilihan Radio */
+    .opts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .opt {
+      position: relative;
+      cursor: pointer;
       display: block;
-      padding: 14px;
-      border-radius: 12px;
+    }
+
+    .opt input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+    }
+
+    .opt>span {
+      display: block;
+      padding: 12px;
+      border-radius: 10px;
       background: var(--bg-surface);
       border: 1px solid var(--gold-border);
-      box-shadow: var(--raise-s);
       transition: all 0.15s;
     }
-    .opt input:checked + span {
+
+    .opt input:checked+span {
       background: rgba(229, 184, 66, 0.12);
       border-color: var(--gold);
-      box-shadow: 0 0 14px var(--gold-glow);
     }
 
     /* Navigasi Header Publik */
     header.pub-header {
-      background: rgba(12, 13, 18, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(12, 13, 18, 0.96);
       border-bottom: 1px solid var(--gold-border);
       position: sticky;
       top: 0;
       z-index: 50;
-      padding: 14px 0;
+      padding: 12px 0;
     }
+
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
       font-family: var(--f-head);
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--ink);
     }
+
     .brand span.symbol {
       width: 32px;
       height: 32px;
@@ -295,7 +442,6 @@
       border-radius: 8px;
       font-size: 0.95rem;
       font-weight: 800;
-      box-shadow: 0 2px 10px var(--gold-glow);
     }
 
     /* Layout Admin dengan Sidebar */
@@ -304,46 +450,51 @@
       min-height: 100vh;
       background: var(--bg);
     }
+
     .admin-sidebar {
-      width: 250px;
+      width: 240px;
       background: var(--bg-surface);
       border-right: 1px solid var(--gold-border);
-      padding: 24px 16px;
+      padding: 22px 14px;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
     }
+
     .admin-nav {
-      margin-top: 24px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       flex: 1;
     }
+
     .nav-link {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 11px 16px;
-      border-radius: 12px;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
       color: var(--mute);
       font-weight: 600;
       transition: all 0.15s;
     }
+
     .nav-link:hover {
       background: rgba(229, 184, 66, 0.08);
       color: var(--gold-light);
       text-decoration: none;
     }
+
     .nav-link.active {
       background: var(--gold-grad);
       color: #0f1015;
       font-weight: 700;
-      box-shadow: 0 4px 14px var(--gold-glow);
     }
+
     .admin-main {
       flex: 1;
-      padding: 28px 32px;
+      padding: 24px 28px;
       overflow-y: auto;
       max-width: 1400px;
     }
@@ -355,23 +506,24 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(18, 20, 28, 0.95);
-      backdrop-filter: blur(14px);
+      background: rgba(18, 20, 28, 0.98);
       border-top: 1px solid var(--gold-border);
-      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
       z-index: 100;
       justify-content: space-around;
     }
+
     .mob-link {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       color: var(--mute);
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 600;
       text-decoration: none;
     }
+
     .mob-link.active {
       color: var(--gold);
     }
@@ -380,100 +532,104 @@
     .ov {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.78);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.82);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
       z-index: 200;
     }
+
     .modal {
       background: var(--bg-surface);
       border: 1px solid var(--gold);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 24px var(--gold-glow);
-      border-radius: 20px;
-      max-width: 620px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+      border-radius: 18px;
+      max-width: 600px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 24px;
+      padding: 22px;
       position: relative;
     }
 
     /* Toast Notification */
     #toast {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 20px;
+      right: 20px;
       z-index: 999;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       pointer-events: none;
     }
+
     .toast-msg {
       background: var(--bg-card);
       color: var(--ink);
       border: 1px solid var(--gold);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-      padding: 12px 20px;
-      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+      padding: 10px 18px;
+      border-radius: 10px;
       font-weight: 600;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: fadeIn 0.25s ease-out;
+      font-size: 0.88rem;
     }
 
     /* Skeleton Loading */
     .sk {
-      background: linear-gradient(90deg, #181b26 25%, #232838 50%, #181b26 75%);
-      background-size: 200% 100%;
-      animation: skel 1.5s infinite;
+      background: #181B26;
       border-radius: 8px;
+      opacity: 0.7;
     }
-    @keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Kartu Mobil Publik */
+    /* Gambar Mobil */
     .car-card-img {
       width: 100%;
-      height: 190px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       background: #10121a;
+      display: block;
     }
 
     /* Image Upload Box */
     .img-upload-box {
       border: 2px dashed var(--gold-border);
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 12px;
+      padding: 14px;
       text-align: center;
       background: rgba(229, 184, 66, 0.03);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
+
     .img-upload-box:hover {
       border-color: var(--gold);
-      background: rgba(229, 184, 66, 0.07);
+      background: rgba(229, 184, 66, 0.06);
     }
+
     .preview-thumbnail {
       width: 100%;
-      max-height: 180px;
+      max-height: 170px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-top: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
       border: 1px solid var(--gold-border);
     }
 
     /* Cetak Invoice / Nota */
     @media print {
-      body * { visibility: hidden; }
-      #printable-area, #printable-area * { visibility: visible; }
+      body * {
+        visibility: hidden;
+      }
+
+      #printable-area,
+      #printable-area * {
+        visibility: visible;
+      }
+
       #printable-area {
         position: absolute;
         left: 0;
@@ -481,25 +637,43 @@
         width: 100%;
         background: #fff !important;
         color: #000 !important;
-        padding: 24px;
+        padding: 20px;
       }
-      #printable-area .badge, #printable-area .btn { display: none !important; }
+
+      #printable-area .badge,
+      #printable-area .btn {
+        display: none !important;
+      }
     }
 
-    /* Responsivitas Layar Kecil */
+    /* Responsif Layar Kecil */
     @media (max-width: 900px) {
-      .admin-sidebar { display: none; }
-      .admin-main { padding: 20px 16px 100px; }
-      .mobile-bottom-nav { display: flex; }
-      header.pub-header { padding: 12px 0; }
+      .admin-sidebar {
+        display: none;
+      }
+
+      .admin-main {
+        padding: 18px 14px 90px;
+      }
+
+      .mobile-bottom-nav {
+        display: flex;
+      }
+
+      header.pub-header {
+        padding: 10px 0;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- BANNER ERROR CONFIG JIKA BELUM DIISI -->
-  <div id="cfg-warn" class="hide" style="background:#B8324F;color:#fff;padding:12px;text-align:center;font-weight:700;z-index:9999;">
-    PEMBERITAHUAN: CONFIG.API_URL belum diisi. Silakan buka file index.html dan masukkan URL deployment Web App Google Apps Script Anda.
+  <div id="cfg-warn" class="hide"
+    style="background:#B8324F;color:#fff;padding:10px;text-align:center;font-weight:700;z-index:9999;">
+    PEMBERITAHUAN: CONFIG.API_URL belum diisi. Silakan buka file index.html dan masukkan URL deployment Web App Google
+    Apps Script Anda.
   </div>
 
   <div id="toast"></div>
@@ -508,32 +682,34 @@
   <script>
     /**
      * =========================================================================
-     *  AUTORENT PRO — FRONTEND SINGLE-FILE APPLICATION (NO EMOJI)
+     *  AUTORENT PRO — FRONTEND SINGLE-FILE APPLICATION (RINGAN, CEPAT, NO EMOJI)
      * =========================================================================
      */
 
     // 1. KONFIGURASI API BACKEND GOOGLE APPS SCRIPT
-    // Tempelkan URL Web App hasil deploy Apps Script (berakhiran /exec) di sini:
     const CONFIG = {
       API_URL: 'https://script.google.com/macros/s/AKfycbwIXqEms6obzrbqldHhtkz_CDZTLYXIOpw2jIRVDBRY5iQ5KlVp1S7HniQRIDWtR5xUIQ/exec'
     };
 
-    // State Aplikasi
+    // State & Fast Cache (Agar Navigasi Cepat & Ringan)
     const S = {
-      token: (function() {
-        try { return localStorage.getItem('autorent_token') || ''; } catch(e) { return ''; }
+      token: (function () {
+        try { return localStorage.getItem('autorent_token') || ''; } catch (e) { return ''; }
       })(),
       publicInfo: null,
-      adminData: null,
-      cacheCars: [],
-      cacheRentals: []
+      cacheDashboard: null,
+      cacheCars: null,
+      cacheRentals: null,
+      cacheDrivers: null,
+      cacheExpenses: null,
+      cacheSettings: null
     };
 
     // Helper Utility
     function esc(s) {
       if (s === null || s === undefined) return '';
-      return String(s).replace(/[&<>"']/g, function(m) {
-        return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m];
+      return String(s).replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
       });
     }
 
@@ -551,7 +727,7 @@
       try {
         if (t) localStorage.setItem('autorent_token', t);
         else localStorage.removeItem('autorent_token');
-      } catch(e) {}
+      } catch (e) { }
     }
 
     function toast(msg, isBad) {
@@ -564,7 +740,17 @@
       }
       d.innerHTML = (isBad ? '[PERINGATAN] ' : '[BERHASIL] ') + esc(msg);
       c.appendChild(d);
-      setTimeout(() => { d.remove(); }, 3500);
+      setTimeout(() => { d.remove(); }, 3200);
+    }
+
+    // Invalidate Cache saat ada data baru tersimpan
+    function invalidateAdminCache() {
+      S.cacheDashboard = null;
+      S.cacheCars = null;
+      S.cacheRentals = null;
+      S.cacheDrivers = null;
+      S.cacheExpenses = null;
+      S.publicInfo = null;
     }
 
     // Pemanggil API JSON ke Apps Script (Menggunakan text/plain agar bebas preflight CORS)
@@ -594,7 +780,7 @@
       }
     }
 
-    // Helper Kompresi Gambar di Browser sebelum dikirim ke Google Drive
+    // Helper Kompresi Gambar Cepat di Browser
     function compressImageFile(file, maxWidth, quality) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -612,7 +798,7 @@
             canvas.height = h;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, w, h);
-            const dataUrl = canvas.toDataURL('image/jpeg', quality || 0.8);
+            const dataUrl = canvas.toDataURL('image/jpeg', quality || 0.75);
             resolve(dataUrl);
           };
           img.onerror = reject;
@@ -668,12 +854,12 @@
         </header>
 
         <main id="pub-view" style="flex:1; padding-bottom:50px;">
-          <div class="wrap stack" style="margin-top:24px;">
-            <div class="sk" style="height:320px;"></div>
+          <div class="wrap stack" style="margin-top:20px;">
+            <div class="sk" style="height:260px;"></div>
           </div>
         </main>
 
-        <footer style="background:#090A0E; border-top:1px solid var(--gold-border); padding:24px 0; text-align:center;">
+        <footer style="background:#090A0E; border-top:1px solid var(--gold-border); padding:20px 0; text-align:center;">
           <div class="wrap">
             <p class="muted">2026 AutoRent Pro — Solusi Manajemen Rental Mobil Profesional</p>
           </div>
@@ -701,7 +887,7 @@
             <div class="card" style="text-align:center;">
               <h3>Gagal Memuat Data Rental</h3>
               <p class="muted" style="margin-top:8px;">${esc(err.message)}</p>
-              <div style="margin-top:18px;">
+              <div style="margin-top:16px;">
                 <button class="btn primary" onclick="location.reload()">Muat Ulang</button>
               </div>
             </div>
@@ -717,16 +903,16 @@
 
       const carCardsHtml = cars.map(c => `
         <div class="card stack" style="padding:16px;">
-          <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=60')}" class="car-card-img" alt="${esc(c.MerkModel)}">
-          <div class="row between" style="margin-top:10px;">
+          <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=450&auto=format&fit=crop&q=70')}" loading="lazy" decoding="async" class="car-card-img" alt="${esc(c.MerkModel)}">
+          <div class="row between" style="margin-top:8px;">
             <span class="badge ${c.Status === 'Tersedia' ? 'b-ready' : 'b-rented'}">${esc(c.Status)}</span>
             <span class="muted" style="font-size:0.8rem;">${esc(c.Tipe || 'Mobil')} / ${esc(c.Tahun)}</span>
           </div>
           <div>
-            <h3 style="font-size:1.1rem;">${esc(c.MerkModel)}</h3>
-            <p class="muted" style="font-size:0.82rem; margin-top:2px;">Plat: ${esc(c.PlatNomor)} | ${esc(c.Transmisi)} | Kapasitas: ${esc(c.Kapasitas)} Kursi</p>
+            <h3 style="font-size:1.05rem;">${esc(c.MerkModel)}</h3>
+            <p class="muted" style="font-size:0.8rem; margin-top:2px;">Plat: ${esc(c.PlatNomor)} | ${esc(c.Transmisi)} | Kapasitas: ${esc(c.Kapasitas)} Kursi</p>
           </div>
-          <div class="inset" style="padding:10px 14px;">
+          <div class="inset" style="padding:8px 12px;">
             <div class="row between">
               <span class="muted" style="font-size:0.8rem;">Lepas Kunci</span>
               <strong style="color:var(--gold-light);">${rp(c.HargaPerHari)}<small>/hari</small></strong>
@@ -736,24 +922,24 @@
               <strong>+${rp(c.HargaDriverPerHari)}<small>/hari</small></strong>
             </div>
           </div>
-          <div style="margin-top:6px;">
+          <div style="margin-top:4px;">
             ${c.Status === 'Tersedia'
-              ? `<a href="#/pesan?car=${encodeURIComponent(c.ID)}" class="btn primary block">Sewa Unit Ini</a>`
-              : `<button class="btn block" disabled>Sedang Disewa</button>`}
+          ? `<a href="#/pesan?car=${encodeURIComponent(c.ID)}" class="btn primary block">Sewa Unit Ini</a>`
+          : `<button class="btn block" disabled>Sedang Disewa</button>`}
           </div>
         </div>
       `).join('');
 
       return `
-        <div class="wrap stack" style="margin-top:20px;">
+        <div class="wrap stack" style="margin-top:16px;">
           <!-- Hero Banner -->
-          <div class="card card-highlight stack" style="padding:36px; text-align:center;">
+          <div class="card card-highlight stack" style="padding:28px; text-align:center;">
             <span class="badge b-gold" style="align-self:center;">PREMIUM FLEET & DAILY SERVICE</span>
-            <h1 style="margin-top:12px;"><span class="gold-text">${esc(set.nama_rental)}</span></h1>
-            <p style="max-width:650px; margin:10px auto 0; color:var(--mute); font-size:1.05rem;">
+            <h1 style="margin-top:10px;"><span class="gold-text">${esc(set.nama_rental)}</span></h1>
+            <p style="max-width:600px; margin:8px auto 0; color:var(--mute); font-size:1rem;">
               ${esc(set.tagline)}
             </p>
-            <div class="row center gap" style="margin-top:20px;">
+            <div class="row center gap" style="margin-top:18px;">
               <a href="#/pesan" class="btn primary">Booking Mobil Sekarang</a>
               <a href="https://wa.me/${esc(set.wa)}" target="_blank" class="btn">Hubungi WhatsApp Resmi</a>
             </div>
@@ -764,21 +950,21 @@
             <div class="card sm row between">
               <div>
                 <span class="muted">Total Unit Armada</span>
-                <h3 style="color:var(--gold); font-size:1.5rem; margin-top:4px;">${cars.length} Unit</h3>
+                <h3 style="color:var(--gold); font-size:1.4rem; margin-top:4px;">${cars.length} Unit</h3>
               </div>
               <span class="badge b-gold">ARMADA</span>
             </div>
             <div class="card sm row between">
               <div>
-                <span class="muted">Unit Siap Pakai (Ready)</span>
-                <h3 style="color:var(--ok); font-size:1.5rem; margin-top:4px;">${readyCars.length} Unit</h3>
+                <span class="muted">Unit Siap Pakai</span>
+                <h3 style="color:var(--ok); font-size:1.4rem; margin-top:4px;">${readyCars.length} Unit</h3>
               </div>
               <span class="badge b-ready">TERSEDIA</span>
             </div>
             <div class="card sm row between">
               <div>
                 <span class="muted">Jam Layanan</span>
-                <h3 style="font-size:1.1rem; margin-top:6px;">${esc(set.jam_operasional)}</h3>
+                <h3 style="font-size:1rem; margin-top:4px;">${esc(set.jam_operasional)}</h3>
               </div>
               <span class="badge b-gold">BUKA</span>
             </div>
@@ -796,12 +982,12 @@
           </div>
 
           <!-- Syarat & Ketentuan Sewa -->
-          <div class="card stack" style="margin-top:16px;">
+          <div class="card stack" style="margin-top:12px;">
             <h3>Syarat & Ketentuan Sewa</h3>
-            <div class="grid grid-2" style="margin-top:10px;">
+            <div class="grid grid-2" style="margin-top:8px;">
               ${(set.syarat_rental || '').split('|').map((sy, i) => `
                 <div class="inset row gap-s" style="align-items:flex-start;">
-                  <span style="color:var(--gold); font-weight:800;">${i+1}.</span>
+                  <span style="color:var(--gold); font-weight:800;">${i + 1}.</span>
                   <span>${esc(sy)}</span>
                 </div>
               `).join('')}
@@ -816,7 +1002,7 @@
 
       const carOptions = cars.map(c => `
         <option value="${esc(c.ID)}" data-harga="${c.HargaPerHari}" data-driver="${c.HargaDriverPerHari}" ${c.ID === preCarId ? 'selected' : ''}>
-          ${esc(c.MerkModel)} (${esc(c.PlatNomor)}) — ${rp(c.HargaPerHari)}/hari ${c.Status !== 'Tersedia' ? '['+c.Status+']' : ''}
+          ${esc(c.MerkModel)} (${esc(c.PlatNomor)}) — ${rp(c.HargaPerHari)}/hari ${c.Status !== 'Tersedia' ? '[' + c.Status + ']' : ''}
         </option>
       `).join('');
 
@@ -826,20 +1012,19 @@
       const tomStr = tomorrow.toISOString().slice(0, 10);
 
       return `
-        <div class="wrap" style="max-width:800px; margin-top:20px;">
+        <div class="wrap" style="max-width:760px; margin-top:20px;">
           <div class="card stack">
             <div class="row between">
               <a href="#/" class="btn sm">Kembali ke Katalog</a>
               <span class="badge b-gold">FORMULIR SEWA ONLINE</span>
             </div>
 
-            <div style="margin-top:10px;">
+            <div style="margin-top:8px;">
               <h2>Pemesanan Unit Rental</h2>
               <p class="muted">Lengkapi data di bawah ini untuk reservasi unit mobil. Petugas kami akan memverifikasi ketersediaan armada.</p>
             </div>
 
-            <form data-form="publicBooking" data-live="calcPublicBooking" class="stack" style="margin-top:16px;">
-              <!-- Honeypot anti bot -->
+            <form data-form="publicBooking" data-live="calcPublicBooking" class="stack" style="margin-top:14px;">
               <input type="text" name="hp_website" style="display:none;" tabindex="-1" autocomplete="off">
 
               <label class="f">
@@ -920,12 +1105,12 @@
                 </label>
                 <label class="f">
                   <span>Catatan atau Rute Perjalanan:</span>
-                  <textarea name="Catatan" class="in" placeholder="Misal: Perjalanan dalam kota / antar kota..."></textarea>
+                  <textarea name="Catatan" class="in" placeholder="Misal: Perjalanan dalam kota / luar kota..."></textarea>
                 </label>
               </div>
 
               <!-- Estimasi Biaya Sewa -->
-              <div id="booking-cost-box" class="card card-highlight stack" style="padding:18px;">
+              <div id="booking-cost-box" class="card card-highlight stack" style="padding:16px;">
                 <h4 style="color:var(--gold-light);">Ringkasan Estimasi Biaya</h4>
                 <div class="row between">
                   <span class="muted">Durasi Terhitung:</span>
@@ -940,13 +1125,13 @@
                   <span id="bkg-biaya-driver">Rp 0</span>
                 </div>
                 <hr style="border:0; border-top:1px dashed var(--gold-border); margin:4px 0;">
-                <div class="row between" style="font-size:1.15rem;">
+                <div class="row between" style="font-size:1.1rem;">
                   <strong class="gold-text">TOTAL ESTIMASI:</strong>
                   <strong id="bkg-total" style="color:var(--gold-light);">Rp 0</strong>
                 </div>
               </div>
 
-              <button type="submit" class="btn primary block" style="min-height:50px; font-size:1.02rem;">
+              <button type="submit" class="btn primary block" style="min-height:48px; font-size:1rem;">
                 Ajukan Booking Unit Sekarang
               </button>
             </form>
@@ -957,12 +1142,12 @@
 
     function viewPublicTrack() {
       return `
-        <div class="wrap" style="max-width:650px; margin-top:30px;">
+        <div class="wrap" style="max-width:620px; margin-top:24px;">
           <div class="card stack">
             <h2>Lacak Status Reservasi Sewa</h2>
             <p class="muted">Ketik Nomor Sewa transaksi dan 4 digit terakhir nomor WhatsApp yang Anda gunakan saat pemesanan.</p>
 
-            <form data-form="trackBooking" class="stack" style="margin-top:16px;">
+            <form data-form="trackBooking" class="stack" style="margin-top:14px;">
               <label class="f">
                 <span>Nomor Sewa Transaksi:</span>
                 <input type="text" name="noSewa" class="in" placeholder="RNT-20261107-001" style="text-transform:uppercase;" required>
@@ -974,7 +1159,7 @@
               <button type="submit" class="btn primary">Periksa Status Sewa</button>
             </form>
 
-            <div id="track-result" style="margin-top:20px;"></div>
+            <div id="track-result" style="margin-top:16px;"></div>
           </div>
         </div>
       `;
@@ -987,7 +1172,6 @@
     async function renderAdminArea(hash) {
       const app = document.getElementById('app');
 
-      // Cek login admin
       if (!S.token) {
         renderAdminLogin();
         return;
@@ -1027,22 +1211,23 @@
               </a>
             </nav>
 
-            <div style="border-top:1px solid var(--gold-border); padding-top:16px;">
+            <div style="border-top:1px solid var(--gold-border); padding-top:14px;">
               <button data-act="logout" class="btn sm danger block">Keluar (Logout)</button>
             </div>
           </aside>
 
           <main class="admin-main">
-            <div class="row between" style="margin-bottom:24px;">
+            <div class="row between" style="margin-bottom:20px;">
               <h2 id="adm-title">Panel Pengelola Rental</h2>
               <div class="row gap">
-                <a href="#/" target="_blank" class="btn sm">Buka Katalog Publik</a>
+                <button data-act="refreshAdminData" class="btn sm" title="Segarkan Data dari Server">Segarkan Data</button>
+                <a href="#/" target="_blank" class="btn sm">Katalog Publik</a>
                 <button data-act="openNewRentalModal" class="btn sm primary">+ Buat Sewa Baru</button>
               </div>
             </div>
 
             <div id="adm-view" class="stack">
-              <div class="sk" style="height:350px;"></div>
+              <div class="sk" style="height:280px;"></div>
             </div>
           </main>
         </div>
@@ -1100,7 +1285,7 @@
           <div class="card" style="text-align:center;">
             <h3>Gagal Memuat Data Admin</h3>
             <p class="muted" style="margin-top:8px;">${esc(err.message)}</p>
-            <div style="margin-top:16px;">
+            <div style="margin-top:14px;">
               <button class="btn primary" onclick="route()">Coba Lagi</button>
             </div>
           </div>
@@ -1111,23 +1296,23 @@
     function renderAdminLogin() {
       const app = document.getElementById('app');
       app.innerHTML = `
-        <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:radial-gradient(circle at center, #181b26 0%, #0c0d12 100%);">
-          <div class="card stack" style="max-width:420px; width:100%; padding:36px 30px; text-align:center;">
-            <div class="brand center" style="margin-bottom:8px;">
+        <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:18px; background:radial-gradient(circle at center, #181b26 0%, #0c0d12 100%);">
+          <div class="card stack" style="max-width:400px; width:100%; padding:32px 26px; text-align:center;">
+            <div class="brand center" style="margin-bottom:6px;">
               <span class="symbol">AR</span>
               <span class="gold-text">AUTORENT</span>
             </div>
             <h2>Login Pengelola</h2>
             <p class="muted">Masukkan password pengelola untuk mengakses dashboard operasional armada.</p>
 
-            <form data-form="adminLogin" class="stack" style="margin-top:20px; text-align:left;">
+            <form data-form="adminLogin" class="stack" style="margin-top:18px; text-align:left;">
               <label class="f">
                 <span>Password Admin:</span>
                 <input type="password" name="password" class="in" placeholder="Ketik password..." required autofocus>
               </label>
-              <button type="submit" class="btn primary block" style="min-height:48px;">Masuk ke Dashboard</button>
+              <button type="submit" class="btn primary block" style="min-height:46px;">Masuk ke Dashboard</button>
             </form>
-            <div style="margin-top:14px;">
+            <div style="margin-top:12px;">
               <a href="#/" class="muted" style="font-size:0.85rem;">Kembali ke Katalog Publik</a>
             </div>
           </div>
@@ -1136,19 +1321,21 @@
     }
 
     // -------------------------------------------------------------------------
-    // SUB-HALAMAN ADMIN: DASHBOARD
+    // SUB-HALAMAN ADMIN: DASHBOARD (INSTANT CACHE READY)
     // -------------------------------------------------------------------------
 
     async function renderAdminDashboard(el) {
-      const data = await api('dashboard');
+      if (!S.cacheDashboard) {
+        S.cacheDashboard = await api('dashboard');
+      }
+      const data = S.cacheDashboard;
       const sum = data.summary;
 
       el.innerHTML = `
-        <!-- Metrik Ringkasan Utama -->
         <div class="grid grid-4">
           <div class="card sm">
             <span class="muted">Armada Siap Pakai</span>
-            <div class="row between" style="margin-top:6px;">
+            <div class="row between" style="margin-top:4px;">
               <h2 style="color:var(--ok);">${sum.carsReady} Unit</h2>
               <span class="badge b-ready">READY</span>
             </div>
@@ -1156,37 +1343,35 @@
           </div>
           <div class="card sm">
             <span class="muted">Sedang Disewa (Jalan)</span>
-            <div class="row between" style="margin-top:6px;">
+            <div class="row between" style="margin-top:4px;">
               <h2 style="color:var(--warn);">${sum.carsRented} Unit</h2>
               <span class="badge b-rented">DISEWA</span>
             </div>
-            <small class="muted">sedang berada di penyewa</small>
+            <small class="muted">sedang di penyewa</small>
           </div>
           <div class="card sm">
             <span class="muted">Omset Bulan Ini</span>
-            <div class="row between" style="margin-top:6px;">
+            <div class="row between" style="margin-top:4px;">
               <h3 style="color:var(--gold-light);">${rp(sum.omsetBulanIni)}</h3>
             </div>
             <small class="muted">total transaksi sewa</small>
           </div>
           <div class="card sm">
             <span class="muted">Piutang Belum Lunas</span>
-            <div class="row between" style="margin-top:6px;">
+            <div class="row between" style="margin-top:4px;">
               <h3 style="${sum.piutangBulanIni > 0 ? 'color:var(--bad)' : 'color:var(--ok)'};">${rp(sum.piutangBulanIni)}</h3>
             </div>
-            <small class="muted">sisa tagihan belum dibayar</small>
+            <small class="muted">sisa tagihan</small>
           </div>
         </div>
 
-        <!-- Alert & Early Warning -->
-        <div class="grid grid-2" style="margin-top:16px;">
-          <!-- Alert Kembali Hari Ini -->
+        <div class="grid grid-2" style="margin-top:14px;">
           <div class="card stack">
             <div class="row between">
               <h4>Jadwal Kembali Hari Ini (${data.kembaliHariIni.length})</h4>
               <span class="badge b-gold">HARI INI</span>
             </div>
-            <div class="stack" style="gap:8px;">
+            <div class="stack" style="gap:6px;">
               ${data.kembaliHariIni.length ? data.kembaliHariIni.map(k => `
                 <div class="inset row between">
                   <div>
@@ -1202,13 +1387,12 @@
             </div>
           </div>
 
-          <!-- Alert Terlambat / Overdue -->
           <div class="card stack" style="border-color:${data.terlambatKembali.length ? 'var(--bad)' : 'var(--gold-border)'};">
             <div class="row between">
               <h4>Peringatan Melewati Batas Waktu (${data.terlambatKembali.length})</h4>
               <span class="badge ${data.terlambatKembali.length ? 'b-service' : 'b-ready'}">OVERDUE</span>
             </div>
-            <div class="stack" style="gap:8px;">
+            <div class="stack" style="gap:6px;">
               ${data.terlambatKembali.length ? data.terlambatKembali.map(t => `
                 <div class="inset row between" style="border-color:var(--bad);">
                   <div>
@@ -1222,9 +1406,8 @@
           </div>
         </div>
 
-        <!-- Alert Pajak STNK Jatuh Tempo -->
         ${data.alertPajak && data.alertPajak.length ? `
-          <div class="card stack" style="border-color:var(--warn); margin-top:16px;">
+          <div class="card stack" style="border-color:var(--warn); margin-top:14px;">
             <div class="row between">
               <h4>Pengingat Pajak STNK (Jatuh Tempo Kurang Dari 30 Hari)</h4>
               <span class="badge b-rented">${data.alertPajak.length} UNIT</span>
@@ -1240,45 +1423,44 @@
           </div>
         ` : ''}
 
-        <!-- Transaksi Terakhir -->
-        <div class="card stack" style="margin-top:20px;">
+        <div class="card stack" style="margin-top:16px;">
           <div class="row between">
             <h4>Transaksi Sewa Terakhir</h4>
             <a href="#/admin/sewa" class="btn sm">Lihat Semua Sewa</a>
           </div>
           <div style="overflow-x:auto;">
-            <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.86rem;">
               <thead>
                 <tr style="border-bottom:1px solid var(--gold-border); text-align:left; color:var(--gold);">
-                  <th style="padding:10px 8px;">No. Sewa</th>
-                  <th style="padding:10px 8px;">Penyewa</th>
-                  <th style="padding:10px 8px;">Mobil</th>
-                  <th style="padding:10px 8px;">Durasi</th>
-                  <th style="padding:10px 8px;">Total</th>
-                  <th style="padding:10px 8px;">Bayar</th>
-                  <th style="padding:10px 8px;">Status Sewa</th>
-                  <th style="padding:10px 8px;">Aksi</th>
+                  <th style="padding:8px;">No. Sewa</th>
+                  <th style="padding:8px;">Penyewa</th>
+                  <th style="padding:8px;">Mobil</th>
+                  <th style="padding:8px;">Durasi</th>
+                  <th style="padding:8px;">Total</th>
+                  <th style="padding:8px;">Bayar</th>
+                  <th style="padding:8px;">Status Sewa</th>
+                  <th style="padding:8px;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 ${data.recentRentals && data.recentRentals.length ? data.recentRentals.map(r => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                    <td style="padding:10px 8px; font-weight:700;">${esc(r.NoSewa)}</td>
-                    <td style="padding:10px 8px;">${esc(r.CustomerNama)}</td>
-                    <td style="padding:10px 8px;">${esc(r.MobilSnapshot)}</td>
-                    <td style="padding:10px 8px;">${r.DurasiHari} hari</td>
-                    <td style="padding:10px 8px; font-weight:700;">${rp(r.Total)}</td>
-                    <td style="padding:10px 8px;">
+                    <td style="padding:8px; font-weight:700;">${esc(r.NoSewa)}</td>
+                    <td style="padding:8px;">${esc(r.CustomerNama)}</td>
+                    <td style="padding:8px;">${esc(r.MobilSnapshot)}</td>
+                    <td style="padding:8px;">${r.DurasiHari} hari</td>
+                    <td style="padding:8px; font-weight:700;">${rp(r.Total)}</td>
+                    <td style="padding:8px;">
                       <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}">${esc(r.StatusBayar)}</span>
                     </td>
-                    <td style="padding:10px 8px;">
+                    <td style="padding:8px;">
                       <span class="badge ${r.StatusSewa === 'Aktif' ? 'b-ready' : r.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(r.StatusSewa)}</span>
                     </td>
-                    <td style="padding:10px 8px;">
-                      <button data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
+                    <td style="padding:8px;">
+                      <button type="button" data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
                     </td>
                   </tr>
-                `).join('') : '<tr><td colspan="8" style="padding:20px; text-align:center;" class="muted">Belum ada transaksi sewa.</td></tr>'}
+                `).join('') : '<tr><td colspan="8" style="padding:16px; text-align:center;" class="muted">Belum ada transaksi sewa.</td></tr>'}
               </tbody>
             </table>
           </div>
@@ -1287,19 +1469,21 @@
     }
 
     // -------------------------------------------------------------------------
-    // SUB-HALAMAN ADMIN: TRANSAKSI SEWA
+    // SUB-HALAMAN ADMIN: TRANSAKSI SEWA (INSTANT CACHE READY)
     // -------------------------------------------------------------------------
 
     async function renderAdminRentals(el) {
-      const rentals = await api('listRentals', {});
-      S.cacheRentals = rentals;
+      if (!S.cacheRentals) {
+        S.cacheRentals = await api('listRentals', {});
+      }
+      const rentals = S.cacheRentals;
 
       el.innerHTML = `
         <div class="card stack">
           <div class="row between">
             <div class="row gap">
-              <input type="text" id="filter-rental-search" class="in" placeholder="Cari penyewa, plat, no sewa..." style="width:260px;" oninput="applyRentalFilter()">
-              <select id="filter-rental-status" class="in" style="width:180px;" onchange="applyRentalFilter()">
+              <input type="text" id="filter-rental-search" class="in" placeholder="Cari penyewa, plat, no sewa..." style="width:250px;" oninput="applyRentalFilter()">
+              <select id="filter-rental-status" class="in" style="width:170px;" onchange="applyRentalFilter()">
                 <option value="Semua">Semua Status</option>
                 <option value="Booking">Booking</option>
                 <option value="Aktif">Aktif (Sedang Jalan)</option>
@@ -1307,10 +1491,10 @@
                 <option value="Dibatalkan">Dibatalkan</option>
               </select>
             </div>
-            <button data-act="openNewRentalModal" class="btn primary">+ Tambah Sewa Langsung</button>
+            <button type="button" data-act="openNewRentalModal" class="btn primary">+ Tambah Sewa Langsung</button>
           </div>
 
-          <div id="rental-list-table" style="margin-top:16px; overflow-x:auto;">
+          <div id="rental-list-table" style="margin-top:14px; overflow-x:auto;">
             ${buildRentalTableHtml(rentals)}
           </div>
         </div>
@@ -1318,57 +1502,57 @@
     }
 
     function buildRentalTableHtml(list) {
-      if (!list.length) return '<p class="muted" style="padding:24px; text-align:center;">Tidak ada transaksi sewa ditemukan.</p>';
+      if (!list.length) return '<p class="muted" style="padding:20px; text-align:center;">Tidak ada transaksi sewa ditemukan.</p>';
 
       return `
-        <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.86rem;">
           <thead>
             <tr style="border-bottom:1px solid var(--gold-border); text-align:left; color:var(--gold);">
-              <th style="padding:10px 8px;">No. Sewa</th>
-              <th style="padding:10px 8px;">Tgl Sewa</th>
-              <th style="padding:10px 8px;">Penyewa & Kontak</th>
-              <th style="padding:10px 8px;">Mobil & Paket</th>
-              <th style="padding:10px 8px;">Periode Sewa</th>
-              <th style="padding:10px 8px;">Total & Sisa</th>
-              <th style="padding:10px 8px;">Status</th>
-              <th style="padding:10px 8px; text-align:right;">Aksi Cepat</th>
+              <th style="padding:8px;">No. Sewa</th>
+              <th style="padding:8px;">Tgl Sewa</th>
+              <th style="padding:8px;">Penyewa & Kontak</th>
+              <th style="padding:8px;">Mobil & Paket</th>
+              <th style="padding:8px;">Periode Sewa</th>
+              <th style="padding:8px;">Total & Sisa</th>
+              <th style="padding:8px;">Status</th>
+              <th style="padding:8px; text-align:right;">Aksi</th>
             </tr>
           </thead>
           <tbody>
             ${list.map(r => `
               <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                <td style="padding:10px 8px; font-weight:700;">${esc(r.NoSewa)}</td>
-                <td style="padding:10px 8px;" class="muted">${fmtDate(r.Tanggal)}</td>
-                <td style="padding:10px 8px;">
+                <td style="padding:8px; font-weight:700;">${esc(r.NoSewa)}</td>
+                <td style="padding:8px;" class="muted">${fmtDate(r.Tanggal)}</td>
+                <td style="padding:8px;">
                   <strong>${esc(r.CustomerNama)}</strong>
-                  <div class="muted" style="font-size:0.8rem;">WA: ${esc(r.CustomerWA)}</div>
+                  <div class="muted" style="font-size:0.78rem;">WA: ${esc(r.CustomerWA)}</div>
                 </td>
-                <td style="padding:10px 8px;">
+                <td style="padding:8px;">
                   <div>${esc(r.MobilSnapshot)}</div>
-                  <span class="badge b-gold" style="font-size:0.7rem;">${esc(r.Paket)}</span>
+                  <span class="badge b-gold" style="font-size:0.68rem;">${esc(r.Paket)}</span>
                 </td>
-                <td style="padding:10px 8px; font-size:0.82rem;">
+                <td style="padding:8px; font-size:0.8rem;">
                   <div>${esc(r.TglMulai)} s/d ${esc(r.TglSelesai)}</div>
                   <small class="muted">(${r.DurasiHari} Hari)</small>
                 </td>
-                <td style="padding:10px 8px;">
+                <td style="padding:8px;">
                   <div><strong>${rp(r.Total)}</strong></div>
                   <small style="color:${r.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(r.Sisa)}</small>
                 </td>
-                <td style="padding:10px 8px;">
+                <td style="padding:8px;">
                   <span class="badge ${r.StatusSewa === 'Aktif' ? 'b-ready' : r.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(r.StatusSewa)}</span>
                   <div style="margin-top:2px;">
-                    <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}" style="font-size:0.7rem;">${esc(r.StatusBayar)}</span>
+                    <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}" style="font-size:0.68rem;">${esc(r.StatusBayar)}</span>
                   </div>
                 </td>
-                <td style="padding:10px 8px; text-align:right;">
+                <td style="padding:8px; text-align:right;">
                   <div class="row gap-s" style="justify-content:flex-end;">
-                    <button data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
+                    <button type="button" data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
                     ${r.StatusSewa === 'Aktif' ? `
-                      <button data-act="openReturnModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">Proses Return</button>
+                      <button type="button" data-act="openReturnModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">Proses Return</button>
                     ` : ''}
                     ${r.StatusSewa === 'Booking' ? `
-                      <button data-act="activateRental" data-id="${esc(r.NoSewa)}" class="btn sm primary">Serah Terima</button>
+                      <button type="button" data-act="activateRental" data-id="${esc(r.NoSewa)}" class="btn sm primary">Serah Terima</button>
                     ` : ''}
                   </div>
                 </td>
@@ -1399,24 +1583,26 @@
     }
 
     // -------------------------------------------------------------------------
-    // SUB-HALAMAN ADMIN: MASTER ARMADA (DENGAN UPLOAD GAMBAR)
+    // SUB-HALAMAN ADMIN: MASTER ARMADA
     // -------------------------------------------------------------------------
 
     async function renderAdminCars(el) {
-      const cars = await api('listCars');
-      S.cacheCars = cars;
+      if (!S.cacheCars) {
+        S.cacheCars = await api('listCars');
+      }
+      const cars = S.cacheCars;
 
       el.innerHTML = `
         <div class="card stack">
           <div class="row between">
             <h4>Daftar Unit Armada Mobil (${cars.length} Unit)</h4>
-            <button data-act="openCarModal" class="btn primary">+ Tambah Mobil Baru</button>
+            <button type="button" data-act="openCarModal" class="btn primary">+ Tambah Mobil Baru</button>
           </div>
 
-          <div class="grid grid-3" style="margin-top:16px;">
+          <div class="grid grid-3" style="margin-top:14px;">
             ${cars.map(c => `
               <div class="card sm stack" style="border-color:${c.Status === 'Tersedia' ? 'var(--gold-border)' : c.Status === 'Disewa' ? 'var(--warn)' : 'var(--bad)'};">
-                <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=60')}" class="car-card-img" style="height:140px;" alt="">
+                <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=450&auto=format&fit=crop&q=70')}" loading="lazy" decoding="async" class="car-card-img" style="height:140px;" alt="">
                 <div class="row between" style="margin-top:4px;">
                   <span class="badge ${c.Status === 'Tersedia' ? 'b-ready' : c.Status === 'Disewa' ? 'b-rented' : 'b-service'}">${esc(c.Status)}</span>
                   <strong style="color:var(--gold-light);">${esc(c.PlatNomor)}</strong>
@@ -1425,7 +1611,7 @@
                   <h4>${esc(c.MerkModel)}</h4>
                   <small class="muted">${esc(c.Tipe)} | ${esc(c.Tahun)} | ${esc(c.Transmisi)}</small>
                 </div>
-                <div class="inset" style="padding:8px 12px; font-size:0.84rem;">
+                <div class="inset" style="padding:6px 10px; font-size:0.82rem;">
                   <div class="row between">
                     <span class="muted">Tarif Lepas Kunci:</span>
                     <strong>${rp(c.HargaPerHari)}</strong>
@@ -1439,8 +1625,8 @@
                     <strong>${fmtDate(c.JatuhTempoPajak)}</strong>
                   </div>
                 </div>
-                <div class="row gap-s" style="margin-top:6px;">
-                  <button data-act="editCar" data-id="${esc(c.ID)}" class="btn sm block">Edit Unit & Foto</button>
+                <div class="row gap-s" style="margin-top:4px;">
+                  <button type="button" data-act="editCar" data-id="${esc(c.ID)}" class="btn sm block">Edit Unit & Foto</button>
                 </div>
               </div>
             `).join('')}
@@ -1454,23 +1640,27 @@
     // -------------------------------------------------------------------------
 
     async function renderAdminDrivers(el) {
-      const drivers = await api('listDrivers');
+      if (!S.cacheDrivers) {
+        S.cacheDrivers = await api('listDrivers');
+      }
+      const drivers = S.cacheDrivers;
+
       el.innerHTML = `
         <div class="card stack">
           <div class="row between">
             <h4>Daftar Supir & Driver (${drivers.length} Orang)</h4>
-            <button data-act="openDriverModal" class="btn primary">+ Tambah Supir Baru</button>
+            <button type="button" data-act="openDriverModal" class="btn primary">+ Tambah Supir Baru</button>
           </div>
 
-          <div class="grid grid-3" style="margin-top:16px;">
+          <div class="grid grid-3" style="margin-top:14px;">
             ${drivers.map(d => `
               <div class="card sm stack">
                 <div class="row between">
                   <span class="badge ${d.Status === 'Tersedia' ? 'b-ready' : d.Status === 'Bertugas' ? 'b-rented' : 'b-service'}">${esc(d.Status)}</span>
                   <a href="https://wa.me/${esc(d.WhatsApp)}" target="_blank" class="btn sm">Chat WhatsApp</a>
                 </div>
-                <h4 style="margin-top:6px;">${esc(d.Nama)}</h4>
-                <div class="inset" style="padding:8px 12px; font-size:0.84rem;">
+                <h4 style="margin-top:4px;">${esc(d.Nama)}</h4>
+                <div class="inset" style="padding:6px 10px; font-size:0.82rem;">
                   <div class="row between">
                     <span class="muted">Tarif Harian:</span>
                     <strong style="color:var(--gold-light);">${rp(d.TarifPerHari)}</strong>
@@ -1480,8 +1670,8 @@
                     <span>${esc(d.WhatsApp)}</span>
                   </div>
                 </div>
-                <p class="muted" style="font-size:0.82rem;">${esc(d.Catatan || '-')}</p>
-                <button data-act="editDriver" data-id="${esc(d.ID)}" class="btn sm">Edit Data Supir</button>
+                <p class="muted" style="font-size:0.8rem;">${esc(d.Catatan || '-')}</p>
+                <button type="button" data-act="editDriver" data-id="${esc(d.ID)}" class="btn sm">Edit Data Supir</button>
               </div>
             `).join('')}
           </div>
@@ -1494,15 +1684,21 @@
     // -------------------------------------------------------------------------
 
     async function renderAdminExpenses(el) {
-      const expenses = await api('listExpenses', {});
-      const cars = await api('listCars');
+      if (!S.cacheExpenses) {
+        S.cacheExpenses = await api('listExpenses', {});
+      }
+      const expenses = S.cacheExpenses;
+      if (!S.cacheCars) {
+        S.cacheCars = await api('listCars');
+      }
+      const cars = S.cacheCars;
 
       el.innerHTML = `
         <div class="grid grid-2">
           <!-- Form Catat Biaya Baru -->
           <div class="card stack">
             <h4>+ Catat Pengeluaran / Servis Mobil</h4>
-            <form data-form="addExpense" class="stack" style="margin-top:12px;">
+            <form data-form="addExpense" class="stack" style="margin-top:10px;">
               <label class="f">
                 <span>Unit Mobil Terkait (Opsional):</span>
                 <select name="CarID" class="in">
@@ -1552,18 +1748,18 @@
           <!-- Riwayat Pengeluaran -->
           <div class="card stack">
             <h4>Riwayat Pengeluaran Operasional</h4>
-            <div style="max-height:480px; overflow-y:auto;" class="stack">
+            <div style="max-height:450px; overflow-y:auto;" class="stack">
               ${expenses.length ? expenses.map(e => `
                 <div class="inset row between">
                   <div>
                     <strong>${esc(e.Kategori)}</strong> — <span class="muted">${fmtDate(e.Tanggal)}</span>
-                    <div style="font-size:0.84rem; margin-top:2px;">${esc(e.Keterangan)}</div>
+                    <div style="font-size:0.82rem; margin-top:2px;">${esc(e.Keterangan)}</div>
                     ${e.CarID ? `<small class="gold-text">Mobil ID: ${esc(e.CarID)}</small>` : ''}
                   </div>
                   <div style="text-align:right;">
                     <strong style="color:var(--bad);">${rp(e.Jumlah)}</strong>
                     <div>
-                      <button data-act="deleteExpense" data-id="${esc(e.ID)}" class="btn sm danger" style="padding:2px 8px; min-height:26px; font-size:0.75rem; margin-top:4px;">Hapus</button>
+                      <button type="button" data-act="deleteExpense" data-id="${esc(e.ID)}" class="btn sm danger" style="padding:2px 8px; min-height:24px; font-size:0.74rem; margin-top:4px;">Hapus</button>
                     </div>
                   </div>
                 </div>
@@ -1588,23 +1784,23 @@
           <div class="row between">
             <h4>Laporan Laba Rugi Operasional</h4>
             <div class="row gap">
-              <input type="date" id="rep-dari" class="in" value="${firstDayOfMonth}" style="width:160px;">
+              <input type="date" id="rep-dari" class="in" value="${firstDayOfMonth}" style="width:150px;">
               <span>s/d</span>
-              <input type="date" id="rep-sampai" class="in" value="${today}" style="width:160px;">
-              <button data-act="reloadReport" class="btn primary sm">Filter</button>
+              <input type="date" id="rep-sampai" class="in" value="${today}" style="width:150px;">
+              <button type="button" data-act="reloadReport" class="btn primary sm">Filter</button>
             </div>
           </div>
 
-          <div class="grid grid-3" style="margin-top:16px;">
+          <div class="grid grid-3" style="margin-top:14px;">
             <div class="card sm">
-              <span class="muted">Total Transaksi Selesai/Aktif</span>
+              <span class="muted">Total Transaksi</span>
               <h2 style="color:var(--gold); margin-top:4px;">${rep.transaksiCount} Sewa</h2>
               <small class="muted">Nilai kontrak: ${rp(rep.totalSewa)}</small>
             </div>
             <div class="card sm">
-              <span class="muted">Uang Masuk (Kas Masuk)</span>
+              <span class="muted">Kas Masuk (Pemasukan)</span>
               <h2 style="color:var(--ok); margin-top:4px;">${rp(rep.totalPemasukan)}</h2>
-              <small class="muted">Piutang belum bayar: ${rp(rep.totalPiutang)}</small>
+              <small class="muted">Piutang: ${rp(rep.totalPiutang)}</small>
             </div>
             <div class="card sm">
               <span class="muted">Total Beban & Biaya</span>
@@ -1613,17 +1809,17 @@
             </div>
           </div>
 
-          <div class="card card-highlight row between" style="margin-top:12px; padding:24px;">
+          <div class="card card-highlight row between" style="margin-top:10px; padding:20px;">
             <div>
-              <h3>ESTIMASI LABA BERSIH (NET PROFIT)</h3>
+              <h3>ESTIMASI LABA BERSIH</h3>
               <p class="muted">Uang Masuk dikurangi Beban Operasional Armada</p>
             </div>
             <h1 class="${rep.labaBersih >= 0 ? 'gold-text' : 'text-bad'}">${rp(rep.labaBersih)}</h1>
           </div>
 
-          <div class="card sm stack" style="margin-top:12px;">
+          <div class="card sm stack" style="margin-top:10px;">
             <h4>Rincian Beban per Kategori</h4>
-            <div class="grid grid-3" style="margin-top:8px;">
+            <div class="grid grid-3" style="margin-top:6px;">
               ${Object.keys(rep.biayaPerKategori || {}).map(k => `
                 <div class="inset row between">
                   <span>${esc(k)}</span>
@@ -1641,14 +1837,17 @@
     // -------------------------------------------------------------------------
 
     async function renderAdminSettings(el) {
-      const set = await api('getSettings');
+      if (!S.cacheSettings) {
+        S.cacheSettings = await api('getSettings');
+      }
+      const set = S.cacheSettings;
 
       el.innerHTML = `
         <div class="grid grid-2">
           <!-- Profil & Kontak Rental -->
           <div class="card stack">
             <h4>Profil Bisnis Rental</h4>
-            <form data-form="saveSettings" class="stack" style="margin-top:12px;">
+            <form data-form="saveSettings" class="stack" style="margin-top:10px;">
               <label class="f">
                 <span>Nama Bisnis Rental:</span>
                 <input type="text" name="nama_rental" class="in" value="${esc(set.nama_rental || '')}" required>
@@ -1677,7 +1876,7 @@
               </label>
               <label class="f">
                 <span>Syarat & Ketentuan Rental (Pisahkan dengan tanda '|'):</span>
-                <textarea name="syarat_rental" class="in" style="min-height:90px;">${esc(set.syarat_rental || '')}</textarea>
+                <textarea name="syarat_rental" class="in" style="min-height:80px;">${esc(set.syarat_rental || '')}</textarea>
               </label>
               <div class="grid grid-2">
                 <label class="f">
@@ -1697,7 +1896,7 @@
           <div class="card stack">
             <h4>Keamanan & Ganti Password</h4>
             <p class="muted">Pastikan menggunakan kombinasi password yang kuat dan aman.</p>
-            <form data-form="changePassword" class="stack" style="margin-top:12px;">
+            <form data-form="changePassword" class="stack" style="margin-top:10px;">
               <label class="f">
                 <span>Password Saat Ini:</span>
                 <input type="password" name="oldPassword" class="in" required>
@@ -1718,7 +1917,7 @@
     }
 
     // =========================================================================
-    // MODAL DIALOGS (DETAIL SEWA, RETURN CHECK, TAMBAH SEWA, INVOICE PRINT)
+    // MODAL DIALOGS DENGAN PENUTUPAN BERSIH & CEPAT
     // =========================================================================
 
     async function showRentalDetailModal(noSewa) {
@@ -1727,19 +1926,19 @@
       const payments = data.payments || [];
 
       const modalHtml = `
-        <div class="ov" data-act="closeModal">
-          <div class="modal stack" onclick="event.stopPropagation()">
+        <div class="ov">
+          <div class="modal stack">
             <div class="row between">
               <div>
                 <span class="badge b-gold">${esc(r.NoSewa)}</span>
                 <h3 style="margin-top:4px;">Detail Transaksi Sewa</h3>
               </div>
-              <button data-act="closeModal" class="btn sm">Tutup</button>
+              <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
             </div>
 
             <!-- Printable Box untuk Invoice / Surat Jalan -->
-            <div id="printable-area" class="card stack" style="background:#090A0E; padding:18px;">
-              <div class="row between" style="border-bottom:1px solid var(--gold-border); padding-bottom:10px;">
+            <div id="printable-area" class="card stack" style="background:#090A0E; padding:16px;">
+              <div class="row between" style="border-bottom:1px solid var(--gold-border); padding-bottom:8px;">
                 <div>
                   <h4 class="gold-text">INVOICE & SURAT JALAN RENTAL</h4>
                   <small class="muted">No: ${esc(r.NoSewa)} | Tgl: ${fmtDate(r.Tanggal)}</small>
@@ -1749,7 +1948,7 @@
                 </div>
               </div>
 
-              <div class="grid grid-2" style="font-size:0.88rem; margin-top:8px;">
+              <div class="grid grid-2" style="font-size:0.86rem; margin-top:8px;">
                 <div>
                   <strong>Data Penyewa:</strong>
                   <div>${esc(r.CustomerNama)}</div>
@@ -1765,7 +1964,7 @@
                 </div>
               </div>
 
-              <div class="inset stack" style="margin-top:10px; font-size:0.86rem;">
+              <div class="inset stack" style="margin-top:8px; font-size:0.84rem;">
                 <div class="row between">
                   <span>Biaya Sewa Mobil (${r.DurasiHari} hari):</span>
                   <strong>${rp(r.BiayaMobil)}</strong>
@@ -1789,7 +1988,7 @@
                   </div>
                 ` : ''}
                 <hr style="border:0; border-top:1px dashed var(--gold-border); margin:4px 0;">
-                <div class="row between" style="font-size:1rem;">
+                <div class="row between" style="font-size:0.96rem;">
                   <strong class="gold-text">TOTAL SEWA:</strong>
                   <strong style="color:var(--gold-light);">${rp(r.Total)}</strong>
                 </div>
@@ -1803,30 +2002,30 @@
                 </div>
               </div>
 
-              <div class="row between" style="font-size:0.8rem; margin-top:8px;">
+              <div class="row between" style="font-size:0.78rem; margin-top:6px;">
                 <span>Kondisi Awal: <strong>KM ${Number(r.KMAwal || 0).toLocaleString()} (BBM: ${esc(r.BBMAwal)})</strong></span>
                 ${r.KMAkhir > 0 ? `<span>Kondisi Kembali: <strong>KM ${Number(r.KMAkhir).toLocaleString()} (BBM: ${esc(r.BBMAkhir)})</strong></span>` : ''}
               </div>
             </div>
 
             <!-- Tombol Aksi Tambahan -->
-            <div class="row between gap" style="margin-top:10px;">
+            <div class="row between gap" style="margin-top:8px;">
               <div class="row gap-s">
-                <button onclick="window.print()" class="btn sm">Cetak Invoice</button>
+                <button type="button" onclick="window.print()" class="btn sm">Cetak Invoice</button>
                 <a href="https://wa.me/${esc(r.CustomerWA)}?text=Halo%20${encodeURIComponent(r.CustomerNama)},%20berikut%20rincian%20sewa%20mobil%20${encodeURIComponent(r.MobilSnapshot)}%20(No:%20${encodeURIComponent(r.NoSewa)}).%20Total:%20${encodeURIComponent(rp(r.Total))},%20Sisa:%20${encodeURIComponent(rp(r.Sisa))}." target="_blank" class="btn sm">Kirim WhatsApp</a>
               </div>
               <div class="row gap-s">
                 ${r.Sisa > 0 ? `
-                  <button data-act="openAddPaymentModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">+ Bayar</button>
+                  <button type="button" data-act="openAddPaymentModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">+ Bayar</button>
                 ` : ''}
               </div>
             </div>
 
             <!-- Log Riwayat Pembayaran -->
-            <div class="stack" style="margin-top:14px; max-height:180px; overflow-y:auto;">
+            <div class="stack" style="margin-top:10px; max-height:160px; overflow-y:auto;">
               <small class="muted">Riwayat Pembayaran:</small>
               ${payments.length ? payments.map(p => `
-                <div class="inset row between" style="padding:6px 12px; font-size:0.82rem;">
+                <div class="inset row between" style="padding:6px 10px; font-size:0.8rem;">
                   <span>${fmtDate(p.Waktu)} — ${esc(p.Metode)} (${esc(p.Catatan || '-')})</span>
                   <strong style="color:var(--ok);">${rp(p.Jumlah)}</strong>
                 </div>
@@ -1844,17 +2043,17 @@
       const r = data.rental;
 
       const modalHtml = `
-        <div class="ov" data-act="closeModal">
-          <div class="modal stack" onclick="event.stopPropagation()">
+        <div class="ov">
+          <div class="modal stack">
             <div class="row between">
               <div>
                 <span class="badge b-service">CHECKLIST PENGEMBALIAN</span>
                 <h3 style="margin-top:4px;">Pengembalian Unit Mobil</h3>
               </div>
-              <button data-act="closeModal" class="btn sm">Tutup</button>
+              <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
             </div>
 
-            <div class="inset stack" style="font-size:0.88rem;">
+            <div class="inset stack" style="font-size:0.86rem;">
               <div class="row between">
                 <span class="muted">Unit:</span>
                 <strong>${esc(r.MobilSnapshot)}</strong>
@@ -1873,7 +2072,7 @@
               </div>
             </div>
 
-            <form data-form="submitReturnRental" class="stack" style="margin-top:10px;">
+            <form data-form="submitReturnRental" class="stack" style="margin-top:8px;">
               <input type="hidden" name="noSewa" value="${esc(r.NoSewa)}">
 
               <div class="grid grid-2">
@@ -1905,7 +2104,7 @@
               </div>
 
               <label class="f">
-                <span>Catatan Pemeriksaan Kondisi Fisik:</span>
+                <span>Catatan Pemeriksaan Fisik:</span>
                 <input type="text" name="KondisiKembali" class="in" value="Bodi mulus, interior bersih, ban cadangan aman">
               </label>
 
@@ -1914,7 +2113,7 @@
                   <span class="muted">Sisa Tagihan Pokok:</span>
                   <strong>${rp(r.Sisa)}</strong>
                 </div>
-                <label class="f" style="margin-top:8px;">
+                <label class="f" style="margin-top:6px;">
                   <span>Pelunasan Sisa & Denda Saat Ini (Rp):</span>
                   <input type="number" name="BayarPelunasan" class="in" value="${r.Sisa}" placeholder="Nominal pelunasan...">
                 </label>
@@ -1928,9 +2127,10 @@
                 </label>
               </div>
 
-              <button type="submit" class="btn primary block" style="min-height:48px;">
-                Konfirmasi Pengembalian Mobil Selesai
-              </button>
+              <div class="row between" style="margin-top:6px;">
+                <button type="submit" class="btn primary">Konfirmasi Selesai</button>
+                <button type="button" data-act="closeModal" class="btn">Batal</button>
+              </div>
             </form>
           </div>
         </div>
@@ -1940,18 +2140,24 @@
     }
 
     async function showNewRentalModal() {
-      const cars = await api('listCars');
-      const drivers = await api('listDrivers');
+      if (!S.cacheCars) {
+        S.cacheCars = await api('listCars');
+      }
+      const cars = S.cacheCars;
+      if (!S.cacheDrivers) {
+        S.cacheDrivers = await api('listDrivers');
+      }
+      const drivers = S.cacheDrivers;
 
       const modalHtml = `
-        <div class="ov" data-act="closeModal">
-          <div class="modal stack" onclick="event.stopPropagation()">
+        <div class="ov">
+          <div class="modal stack">
             <div class="row between">
               <h3>Buat Transaksi Sewa Baru (Admin)</h3>
-              <button data-act="closeModal" class="btn sm">Tutup</button>
+              <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
             </div>
 
-            <form data-form="createAdminRental" class="stack" style="margin-top:10px;">
+            <form data-form="createAdminRental" class="stack" style="margin-top:8px;">
               <label class="f">
                 <span>Pilih Unit Mobil:</span>
                 <select name="CarID" class="in" required>
@@ -2036,7 +2242,10 @@
                 </label>
               </div>
 
-              <button type="submit" class="btn primary block">Simpan Transaksi Sewa</button>
+              <div class="row between" style="margin-top:6px;">
+                <button type="submit" class="btn primary">Simpan Transaksi Sewa</button>
+                <button type="button" data-act="closeModal" class="btn">Batal</button>
+              </div>
             </form>
           </div>
         </div>
@@ -2046,7 +2255,7 @@
     }
 
     // =========================================================================
-    // MODAL ARMADA MOBIL (DENGAN DUKUNGAN UPLOAD FOTO KE GOOGLE DRIVE)
+    // MODAL ARMADA MOBIL (DENGAN UPLOAD FOTO KE GOOGLE DRIVE)
     // =========================================================================
 
     function openCarModalHtml(c) {
@@ -2055,13 +2264,13 @@
       const curImg = c ? (c.FotoUrl || '') : '';
 
       return `
-        <div class="ov" data-act="closeModal">
-          <div class="modal stack" onclick="event.stopPropagation()">
+        <div class="ov">
+          <div class="modal stack">
             <div class="row between">
               <h3>${title}</h3>
-              <button data-act="closeModal" class="btn sm">Tutup</button>
+              <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
             </div>
-            <form data-form="saveCar" class="stack" style="margin-top:10px;">
+            <form data-form="saveCar" class="stack" style="margin-top:8px;">
               ${isEdit ? `<input type="hidden" name="ID" value="${esc(c.ID)}">` : ''}
               <input type="hidden" name="ImageBase64" id="car-image-base64" value="">
 
@@ -2131,7 +2340,7 @@
               <!-- Bagian Upload Gambar Mobil -->
               <div class="inset stack">
                 <h4 style="color:var(--gold);">Foto Armada Mobil</h4>
-                <p class="muted" style="font-size:0.83rem;">Pilih foto mobil dari laptop/HP Anda. Foto otomatis disimpan ke Google Drive.</p>
+                <p class="muted" style="font-size:0.82rem;">Pilih foto mobil dari laptop/HP Anda. Foto otomatis disimpan ke Google Drive.</p>
 
                 <div class="img-upload-box" onclick="document.getElementById('car-file-input').click()">
                   <input type="file" id="car-file-input" accept="image/*" style="display:none;" onchange="handleCarFileSelect(this)">
@@ -2140,7 +2349,7 @@
                 </div>
 
                 <div id="img-preview-box">
-                  ${curImg ? `<img src="${esc(curImg)}" class="preview-thumbnail" id="car-preview-img" alt="Pratinjau Foto">` : '<img id="car-preview-img" class="preview-thumbnail hide" alt="Pratinjau Foto">'}
+                  ${curImg ? `<img src="${esc(curImg)}" loading="lazy" class="preview-thumbnail" id="car-preview-img" alt="Pratinjau Foto">` : '<img id="car-preview-img" class="preview-thumbnail hide" alt="Pratinjau Foto">'}
                 </div>
 
                 <label class="f" style="margin-top:6px;">
@@ -2151,7 +2360,10 @@
 
               <div class="row between">
                 <button type="submit" class="btn primary" id="car-submit-btn">Simpan Mobil</button>
-                ${isEdit ? `<button type="button" data-act="deleteCar" data-id="${esc(c.ID)}" class="btn danger">Nonaktifkan</button>` : ''}
+                <div class="row gap-s">
+                  ${isEdit ? `<button type="button" data-act="deleteCar" data-id="${esc(c.ID)}" class="btn danger">Nonaktifkan</button>` : ''}
+                  <button type="button" data-act="closeModal" class="btn">Batal</button>
+                </div>
               </div>
             </form>
           </div>
@@ -2167,8 +2379,8 @@
         previewImg.src = URL.createObjectURL(file);
         previewImg.classList.remove('hide');
 
-        // Kompresi di browser (max lebar 1000px, kualitas 80%) agar upload sekejap
-        const base64 = await compressImageFile(file, 1000, 0.8);
+        // Kompresi di browser (max lebar 900px, kualitas 75%) agar upload super cepat
+        const base64 = await compressImageFile(file, 900, 0.75);
         document.getElementById('car-image-base64').value = base64;
         toast('Foto dipilih dan siap diunggah saat Anda menekan tombol Simpan.');
       } catch (err) {
@@ -2177,7 +2389,7 @@
     }
 
     // =========================================================================
-    // EVENT DELEGATION & FORM HANDLERS
+    // EVENT DELEGATION & FORM HANDLERS (DIPERBAIKI SECARA ROBUST)
     // =========================================================================
 
     const ACT = {
@@ -2187,7 +2399,14 @@
         toast('Anda telah keluar.');
       },
       closeModal: () => {
-        document.getElementById('modal-container').innerHTML = '';
+        const c = document.getElementById('modal-container');
+        if (c) c.innerHTML = '';
+      },
+      refreshAdminData: async () => {
+        invalidateAdminCache();
+        toast('Menyegarkan data dari server...');
+        await renderAdminArea(location.hash);
+        toast('Data berhasil diperbarui.');
       },
       viewRentalDetail: (btn) => {
         showRentalDetailModal(btn.dataset.id);
@@ -2203,6 +2422,7 @@
         try {
           await api('updateRentalStatus', { noSewa: btn.dataset.id, status: 'Aktif' });
           toast('Sewa diaktifkan. Status armada otomatis berubah menjadi DISEWA.');
+          invalidateAdminCache();
           route();
         } catch (e) { toast(e.message, true); }
       },
@@ -2213,6 +2433,7 @@
         api('addPayment', { noSewa: noSewa, jumlah: Number(jml), metode: 'Transfer/Tunai' })
           .then(() => {
             toast('Pembayaran berhasil dicatat.');
+            invalidateAdminCache();
             showRentalDetailModal(noSewa);
           })
           .catch(e => toast(e.message, true));
@@ -2232,6 +2453,7 @@
           await api('deleteCar', { id: btn.dataset.id });
           toast('Mobil dinonaktifkan.');
           ACT.closeModal();
+          invalidateAdminCache();
           route();
         } catch (e) { toast(e.message, true); }
       },
@@ -2240,18 +2462,19 @@
         try {
           await api('deleteExpense', { id: btn.dataset.id });
           toast('Pengeluaran dihapus.');
+          invalidateAdminCache();
           route();
         } catch (e) { toast(e.message, true); }
       },
       openDriverModal: () => {
         const modalHtml = `
-          <div class="ov" data-act="closeModal">
-            <div class="modal stack" onclick="event.stopPropagation()">
+          <div class="ov">
+            <div class="modal stack">
               <div class="row between">
                 <h3>Tambah Supir Baru</h3>
-                <button data-act="closeModal" class="btn sm">Tutup</button>
+                <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
               </div>
-              <form data-form="saveDriver" class="stack" style="margin-top:10px;">
+              <form data-form="saveDriver" class="stack" style="margin-top:8px;">
                 <label class="f">
                   <span>Nama Supir:</span>
                   <input type="text" name="Nama" class="in" required>
@@ -2270,7 +2493,10 @@
                   <span>Catatan Pengalaman:</span>
                   <input type="text" name="Catatan" class="in" placeholder="Pengalaman luar kota / SIM B1...">
                 </label>
-                <button type="submit" class="btn primary block">Simpan Supir</button>
+                <div class="row between" style="margin-top:6px;">
+                  <button type="submit" class="btn primary">Simpan Supir</button>
+                  <button type="button" data-act="closeModal" class="btn">Batal</button>
+                </div>
               </form>
             </div>
           </div>
@@ -2279,47 +2505,48 @@
       },
       editDriver: (btn) => {
         const id = btn.dataset.id;
-        api('listDrivers').then(drivers => {
-          const d = drivers.find(item => item.ID === id);
-          if (!d) return;
-          const modalHtml = `
-            <div class="ov" data-act="closeModal">
-              <div class="modal stack" onclick="event.stopPropagation()">
-                <div class="row between">
-                  <h3>Edit Supir — ${esc(d.Nama)}</h3>
-                  <button data-act="closeModal" class="btn sm">Tutup</button>
-                </div>
-                <form data-form="saveDriver" class="stack" style="margin-top:10px;">
-                  <input type="hidden" name="ID" value="${esc(d.ID)}">
-                  <label class="f">
-                    <span>Nama Supir:</span>
-                    <input type="text" name="Nama" class="in" value="${esc(d.Nama)}" required>
-                  </label>
-                  <div class="grid grid-2">
-                    <label class="f">
-                      <span>No. WhatsApp:</span>
-                      <input type="tel" name="WhatsApp" class="in" value="${esc(d.WhatsApp)}" required>
-                    </label>
-                    <label class="f">
-                      <span>Tarif Harian:</span>
-                      <input type="number" name="TarifPerHari" class="in" value="${d.TarifPerHari}">
-                    </label>
-                  </div>
-                  <label class="f">
-                    <span>Status Supir:</span>
-                    <select name="Status" class="in">
-                      <option value="Tersedia" ${d.Status === 'Tersedia' ? 'selected' : ''}>Tersedia</option>
-                      <option value="Bertugas" ${d.Status === 'Bertugas' ? 'selected' : ''}>Bertugas</option>
-                      <option value="Libur" ${d.Status === 'Libur' ? 'selected' : ''}>Libur</option>
-                    </select>
-                  </label>
-                  <button type="submit" class="btn primary block">Perbarui Data Supir</button>
-                </form>
+        const d = (S.cacheDrivers || []).find(item => item.ID === id);
+        if (!d) return;
+        const modalHtml = `
+          <div class="ov">
+            <div class="modal stack">
+              <div class="row between">
+                <h3>Edit Supir — ${esc(d.Nama)}</h3>
+                <button type="button" data-act="closeModal" class="btn sm">Tutup</button>
               </div>
+              <form data-form="saveDriver" class="stack" style="margin-top:8px;">
+                <input type="hidden" name="ID" value="${esc(d.ID)}">
+                <label class="f">
+                  <span>Nama Supir:</span>
+                  <input type="text" name="Nama" class="in" value="${esc(d.Nama)}" required>
+                </label>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>No. WhatsApp:</span>
+                    <input type="tel" name="WhatsApp" class="in" value="${esc(d.WhatsApp)}" required>
+                  </label>
+                  <label class="f">
+                    <span>Tarif Harian:</span>
+                    <input type="number" name="TarifPerHari" class="in" value="${d.TarifPerHari}">
+                  </label>
+                </div>
+                <label class="f">
+                  <span>Status Supir:</span>
+                  <select name="Status" class="in">
+                    <option value="Tersedia" ${d.Status === 'Tersedia' ? 'selected' : ''}>Tersedia</option>
+                    <option value="Bertugas" ${d.Status === 'Bertugas' ? 'selected' : ''}>Bertugas</option>
+                    <option value="Libur" ${d.Status === 'Libur' ? 'selected' : ''}>Libur</option>
+                  </select>
+                </label>
+                <div class="row between" style="margin-top:6px;">
+                  <button type="submit" class="btn primary">Perbarui Data Supir</button>
+                  <button type="button" data-act="closeModal" class="btn">Batal</button>
+                </div>
+              </form>
             </div>
-          `;
-          document.getElementById('modal-container').innerHTML = modalHtml;
-        });
+          </div>
+        `;
+        document.getElementById('modal-container').innerHTML = modalHtml;
       },
       reloadReport: () => {
         const dari = document.getElementById('rep-dari').value;
@@ -2347,19 +2574,19 @@
         const waUrl = `https://wa.me/${esc(S.publicInfo.settings.wa)}?text=${encodeURIComponent(waMsg)}`;
 
         document.getElementById('pub-view').innerHTML = `
-          <div class="wrap" style="max-width:650px; margin-top:30px;">
-            <div class="card card-highlight stack" style="text-align:center; padding:36px;">
+          <div class="wrap" style="max-width:620px; margin-top:24px;">
+            <div class="card card-highlight stack" style="text-align:center; padding:32px;">
               <h2>Permohonan Booking Berhasil Terkirim</h2>
               <p class="muted">Terima kasih atas pemesanan Anda, <strong>${esc(res.customerNama)}</strong>. Permohonan sewa mobil telah tercatat di sistem kami.</p>
               
-              <div class="inset stack" style="margin:20px 0; padding:18px;">
+              <div class="inset stack" style="margin:18px 0; padding:16px;">
                 <span class="muted">Nomor Transaksi Sewa:</span>
-                <h2 class="gold-text" style="font-size:1.8rem;">${esc(res.noSewa)}</h2>
+                <h2 class="gold-text" style="font-size:1.7rem;">${esc(res.noSewa)}</h2>
                 <small class="muted">Simpan No. Sewa ini untuk memeriksa status persetujuan.</small>
               </div>
 
-              <div class="stack" style="gap:10px;">
-                <a href="${waUrl}" target="_blank" class="btn primary block" style="min-height:50px;">
+              <div class="stack" style="gap:8px;">
+                <a href="${waUrl}" target="_blank" class="btn primary block" style="min-height:48px;">
                   Konfirmasi Otomatis ke WhatsApp Admin
                 </a>
                 <a href="#/lacak" class="btn block">Lacak Status Booking</a>
@@ -2373,23 +2600,23 @@
         const val = Object.fromEntries(new FormData(f));
         const res = await api('trackBooking', val);
         document.getElementById('track-result').innerHTML = `
-          <div class="inset stack" style="margin-top:14px;">
+          <div class="inset stack" style="margin-top:12px;">
             <div class="row between">
               <span class="badge b-gold">${esc(res.NoSewa)}</span>
               <span class="badge ${res.StatusSewa === 'Aktif' ? 'b-ready' : res.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(res.StatusSewa)}</span>
             </div>
             <h3 style="margin-top:4px;">${esc(res.Mobil)}</h3>
-            <div class="muted" style="font-size:0.86rem;">Penyewa: <strong>${esc(res.CustomerNama)}</strong> | Paket: ${esc(res.Paket)}</div>
-            <div class="muted" style="font-size:0.86rem;">Periode: ${esc(res.TglMulai)} s/d ${esc(res.TglSelesai)}</div>
+            <div class="muted" style="font-size:0.84rem;">Penyewa: <strong>${esc(res.CustomerNama)}</strong> | Paket: ${esc(res.Paket)}</div>
+            <div class="muted" style="font-size:0.84rem;">Periode: ${esc(res.TglMulai)} s/d ${esc(res.TglSelesai)}</div>
             
-            <div class="card sm row between" style="margin-top:8px;">
+            <div class="card sm row between" style="margin-top:6px;">
               <div>
                 <span class="muted">Total Biaya:</span>
                 <div><strong>${rp(res.Total)}</strong></div>
               </div>
               <div style="text-align:right;">
                 <span class="badge ${res.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}">${esc(res.StatusBayar)}</span>
-                <div style="font-size:0.82rem; margin-top:2px; color:${res.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(res.Sisa)}</div>
+                <div style="font-size:0.8rem; margin-top:2px; color:${res.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(res.Sisa)}</div>
               </div>
             </div>
           </div>
@@ -2400,6 +2627,7 @@
         await api('createRental', val);
         toast('Transaksi sewa berhasil dibuat.');
         ACT.closeModal();
+        invalidateAdminCache();
         route();
       },
       submitReturnRental: async (f) => {
@@ -2407,6 +2635,7 @@
         await api('returnRental', val);
         toast('Pengembalian unit berhasil dicatat. Status mobil kembali Tersedia.');
         ACT.closeModal();
+        invalidateAdminCache();
         route();
       },
       saveCar: async (f) => {
@@ -2414,7 +2643,7 @@
         await api('saveCar', val);
         toast('Data mobil dan foto berhasil disimpan.');
         ACT.closeModal();
-        S.publicInfo = null; // Invalidate cache
+        invalidateAdminCache();
         route();
       },
       saveDriver: async (f) => {
@@ -2422,19 +2651,21 @@
         await api('saveDriver', val);
         toast('Data supir berhasil disimpan.');
         ACT.closeModal();
+        invalidateAdminCache();
         route();
       },
       addExpense: async (f) => {
         const val = Object.fromEntries(new FormData(f));
         await api('addExpense', val);
         toast('Pengeluaran berhasil dicatat.');
+        invalidateAdminCache();
         route();
       },
       saveSettings: async (f) => {
         const val = Object.fromEntries(new FormData(f));
         await api('saveSettings', val);
         toast('Pengaturan rental berhasil diperbarui.');
-        S.publicInfo = null;
+        invalidateAdminCache();
       },
       changePassword: async (f) => {
         const val = Object.fromEntries(new FormData(f));
@@ -2480,12 +2711,30 @@
           document.getElementById('bkg-biaya-mobil').textContent = rp(biayaMobil);
           document.getElementById('bkg-biaya-driver').textContent = rp(biayaDriver);
           document.getElementById('bkg-total').textContent = rp(total);
-        } catch(e) {}
+        } catch (e) { }
       }
     };
 
-    // GLOBAL EVENT DELEGATION
+    // =========================================================================
+    // EVENT DELEGATION GLOBAL: PENUTUPAN MODAL BERSIH & FORM SUBMIT
+    // =========================================================================
+
+    // Tutup modal dengan tombol Escape di keyboard
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        ACT.closeModal();
+      }
+    });
+
     document.addEventListener('click', (e) => {
+      // 1. Jika klik tepat pada backdrop luar modal (.ov), tutup modal
+      if (e.target.classList && e.target.classList.contains('ov')) {
+        e.preventDefault();
+        ACT.closeModal();
+        return;
+      }
+
+      // 2. Jika klik tombol aksi (termasuk tombol Tutup / Batal yang ber-data-act)
       const btn = e.target.closest('[data-act]');
       if (!btn) return;
       const act = btn.dataset.act;
@@ -2531,4 +2780,5 @@
     });
   </script>
 </body>
+
 </html>
