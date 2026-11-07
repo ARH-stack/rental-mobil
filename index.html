@@ -1,0 +1,2534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoRent Pro — Sistem Manajemen Rental Mobil</title>
+  <meta name="theme-color" content="#0C0D12">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2314161F'/%3E%3Cpath d='M20 65 L30 35 L70 35 L80 65 Z' fill='%23E5B842'/%3E%3Ccircle cx='35' cy='68' r='10' fill='%23F7D87E'/%3E%3Ccircle cx='65' cy='68' r='10' fill='%23F7D87E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       TOKEN WARNA & GAYA: LUXURY DARK OBSIDIAN & GOLD ACCENTS (NO EMOJI)
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+      --bg: #0C0D12;
+      --bg-surface: #14161F;
+      --bg-card: #181B26;
+      --bg-card-hover: #222636;
+      --bg-inset: #090A0E;
+      
+      --ink: #F9FAFB;
+      --mute: #9CA3AF;
+      --dim: #6B7280;
+      
+      /* Palet Emas */
+      --gold: #E5B842;
+      --gold-light: #F7D87E;
+      --gold-dark: #B88E28;
+      --gold-glow: rgba(229, 184, 66, 0.28);
+      --gold-soft: rgba(229, 184, 66, 0.12);
+      --gold-grad: linear-gradient(135deg, #FCE59F 0%, #E5B842 50%, #B88E28 100%);
+      --gold-border: rgba(229, 184, 66, 0.24);
+      --gold-border-focus: rgba(229, 184, 66, 0.6);
+
+      /* Status Operasional */
+      --ok: #10B981;
+      --ok-soft: rgba(16, 185, 129, 0.14);
+      --warn: #F59E0B;
+      --warn-soft: rgba(245, 158, 11, 0.14);
+      --bad: #EF4444;
+      --bad-soft: rgba(239, 68, 68, 0.14);
+      --info: #3B82F6;
+      --info-soft: rgba(59, 130, 246, 0.14);
+
+      /* Efek Bayangan & Bevel Gelap */
+      --raise: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--gold-border);
+      --raise-s: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(229, 184, 66, 0.16);
+      --raise-glow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 18px var(--gold-glow), 0 0 0 1px var(--gold-border);
+      --inset: inset 2px 2px 6px rgba(0, 0, 0, 0.8), inset -1px -1px 3px rgba(229, 184, 66, 0.05);
+
+      --f-head: 'Cinzel', serif;
+      --f-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 500 15px/1.6 var(--f-body);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+    h1, h2 { font-family: var(--f-head); letter-spacing: 0.02em; }
+    h1 { font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 700; }
+    h2 { font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    h4 { font-size: 1rem; font-weight: 600; }
+
+    p { margin: 0; }
+    a { color: var(--gold-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    small, .muted { color: var(--mute); font-size: 0.85rem; }
+    .gold-text {
+      background: var(--gold-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    /* Utilitas Layout */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .stack > * + * { margin-top: 18px; }
+    .row { display: flex; align-items: center; flex-wrap: wrap; }
+    .gap-s { gap: 8px; }
+    .gap { gap: 14px; }
+    .gap-l { gap: 24px; }
+    .between { justify-content: space-between; }
+    .center { align-items: center; justify-content: center; }
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+    .hide { display: none !important; }
+
+    /* Komponen Kartu & Permukaan */
+    .card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      box-shadow: var(--raise);
+      padding: 22px;
+      position: relative;
+      border: 1px solid var(--gold-border);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(229, 184, 66, 0.4);
+    }
+    .card.sm { padding: 14px 18px; border-radius: 14px; box-shadow: var(--raise-s); }
+    .card-highlight {
+      background: linear-gradient(145deg, rgba(229,184,66,0.08) 0%, rgba(20,22,31,0.95) 100%);
+      box-shadow: var(--raise-glow);
+    }
+    .inset {
+      background: var(--bg-inset);
+      border-radius: 14px;
+      box-shadow: var(--inset);
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Tombol Interaktif */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--gold-border);
+      cursor: pointer;
+      text-decoration: none;
+      background: var(--bg-surface);
+      color: var(--ink);
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 12px;
+      min-height: 44px;
+      font-size: 0.92rem;
+      transition: all 0.15s ease-in-out;
+      box-shadow: var(--raise-s);
+      user-select: none;
+    }
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: none;
+      box-shadow: var(--inset);
+    }
+    .btn.primary {
+      background: var(--gold-grad);
+      color: #121008;
+      border: 1px solid var(--gold-light);
+      box-shadow: 0 4px 18px var(--gold-glow);
+    }
+    .btn.primary:hover {
+      box-shadow: 0 6px 24px rgba(229, 184, 66, 0.45);
+      filter: brightness(1.06);
+    }
+    .btn.primary:active {
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+    }
+    .btn.danger {
+      background: var(--bad-soft);
+      color: var(--bad);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    .btn.danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+    .btn.sm {
+      min-height: 36px;
+      padding: 6px 14px;
+      font-size: 0.84rem;
+      border-radius: 10px;
+    }
+    .btn.block { width: 100%; }
+    .btn[disabled] {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    /* SVG Icons Utility */
+    .svg-icon {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* Badge & Tag */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .b-ready { background: var(--ok-soft); color: var(--ok); border: 1px solid rgba(16,185,129,0.3); }
+    .b-rented { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+    .b-service { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(239,68,68,0.3); }
+    .b-gold { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); }
+
+    /* Input & Form */
+    label.f { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 4px; color: var(--ink); }
+    label.f > span { display: block; margin-bottom: 6px; }
+    .in, select.in, textarea.in {
+      width: 100%;
+      border: 1px solid rgba(229, 184, 66, 0.2);
+      background: var(--bg-inset);
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 14px;
+      min-height: 44px;
+      font: inherit;
+      box-shadow: var(--inset);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .in:focus, select.in:focus, textarea.in:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    textarea.in { min-height: 80px; resize: vertical; }
+    .in::placeholder { color: var(--dim); }
+
+    /* Pilihan Radio Kartu (Paket Sewa) */
+    .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .opt { position: relative; cursor: pointer; display: block; }
+    .opt input { position: absolute; opacity: 0; inset: 0; }
+    .opt > span {
+      display: block;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--gold-border);
+      box-shadow: var(--raise-s);
+      transition: all 0.15s;
+    }
+    .opt input:checked + span {
+      background: rgba(229, 184, 66, 0.12);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px var(--gold-glow);
+    }
+
+    /* Navigasi Header Publik */
+    header.pub-header {
+      background: rgba(12, 13, 18, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gold-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-head);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .brand span.symbol {
+      width: 32px;
+      height: 32px;
+      background: var(--gold-grad);
+      color: #0c0d12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 2px 10px var(--gold-glow);
+    }
+
+    /* Layout Admin dengan Sidebar */
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    .admin-sidebar {
+      width: 250px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--gold-border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .admin-nav {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      color: var(--mute);
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .nav-link:hover {
+      background: rgba(229, 184, 66, 0.08);
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+    .nav-link.active {
+      background: var(--gold-grad);
+      color: #0f1015;
+      font-weight: 700;
+      box-shadow: 0 4px 14px var(--gold-glow);
+    }
+    .admin-main {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+      max-width: 1400px;
+    }
+
+    /* Bottom Bar Navigasi Mobile */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(18, 20, 28, 0.95);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--gold-border);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      z-index: 100;
+      justify-content: space-around;
+    }
+    .mob-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--mute);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .mob-link.active {
+      color: var(--gold);
+    }
+
+    /* Modal Dialog */
+    .ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+    }
+    .modal {
+      background: var(--bg-surface);
+      border: 1px solid var(--gold);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 24px var(--gold-glow);
+      border-radius: 20px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast-msg {
+      background: var(--bg-card);
+      color: var(--ink);
+      border: 1px solid var(--gold);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    /* Skeleton Loading */
+    .sk {
+      background: linear-gradient(90deg, #181b26 25%, #232838 50%, #181b26 75%);
+      background-size: 200% 100%;
+      animation: skel 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Kartu Mobil Publik */
+    .car-card-img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #10121a;
+    }
+
+    /* Image Upload Box */
+    .img-upload-box {
+      border: 2px dashed var(--gold-border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      background: rgba(229, 184, 66, 0.03);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .img-upload-box:hover {
+      border-color: var(--gold);
+      background: rgba(229, 184, 66, 0.07);
+    }
+    .preview-thumbnail {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid var(--gold-border);
+    }
+
+    /* Cetak Invoice / Nota */
+    @media print {
+      body * { visibility: hidden; }
+      #printable-area, #printable-area * { visibility: visible; }
+      #printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #fff !important;
+        color: #000 !important;
+        padding: 24px;
+      }
+      #printable-area .badge, #printable-area .btn { display: none !important; }
+    }
+
+    /* Responsivitas Layar Kecil */
+    @media (max-width: 900px) {
+      .admin-sidebar { display: none; }
+      .admin-main { padding: 20px 16px 100px; }
+      .mobile-bottom-nav { display: flex; }
+      header.pub-header { padding: 12px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER ERROR CONFIG JIKA BELUM DIISI -->
+  <div id="cfg-warn" class="hide" style="background:#B8324F;color:#fff;padding:12px;text-align:center;font-weight:700;z-index:9999;">
+    PEMBERITAHUAN: CONFIG.API_URL belum diisi. Silakan buka file index.html dan masukkan URL deployment Web App Google Apps Script Anda.
+  </div>
+
+  <div id="toast"></div>
+  <div id="app"></div>
+
+  <script>
+    /**
+     * =========================================================================
+     *  AUTORENT PRO — FRONTEND SINGLE-FILE APPLICATION (NO EMOJI)
+     * =========================================================================
+     */
+
+    // 1. KONFIGURASI API BACKEND GOOGLE APPS SCRIPT
+    // Tempelkan URL Web App hasil deploy Apps Script (berakhiran /exec) di sini:
+    const CONFIG = {
+      API_URL: 'PASTE_URL_WEB_APP_DI_SINI'
+    };
+
+    // State Aplikasi
+    const S = {
+      token: (function() {
+        try { return localStorage.getItem('autorent_token') || ''; } catch(e) { return ''; }
+      })(),
+      publicInfo: null,
+      adminData: null,
+      cacheCars: [],
+      cacheRentals: []
+    };
+
+    // Helper Utility
+    function esc(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/[&<>"']/g, function(m) {
+        return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m];
+      });
+    }
+
+    function rp(n) {
+      return 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+    }
+
+    function fmtDate(s) {
+      if (!s) return '-';
+      return String(s).slice(0, 10);
+    }
+
+    function setToken(t) {
+      S.token = t;
+      try {
+        if (t) localStorage.setItem('autorent_token', t);
+        else localStorage.removeItem('autorent_token');
+      } catch(e) {}
+    }
+
+    function toast(msg, isBad) {
+      const c = document.getElementById('toast');
+      const d = document.createElement('div');
+      d.className = 'toast-msg';
+      if (isBad) {
+        d.style.borderColor = 'var(--bad)';
+        d.style.color = '#FFA8B8';
+      }
+      d.innerHTML = (isBad ? '[PERINGATAN] ' : '[BERHASIL] ') + esc(msg);
+      c.appendChild(d);
+      setTimeout(() => { d.remove(); }, 3500);
+    }
+
+    // Pemanggil API JSON ke Apps Script (Menggunakan text/plain agar bebas preflight CORS)
+    async function api(action, data) {
+      if (!CONFIG.API_URL || CONFIG.API_URL.includes('PASTE_URL')) {
+        document.getElementById('cfg-warn').classList.remove('hide');
+        throw new Error('CONFIG.API_URL belum diisi. Ikuti petunjuk pada PANDUAN-INSTALASI.md.');
+      }
+      try {
+        const res = await fetch(CONFIG.API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: action, token: S.token, data: data || {} })
+        });
+        const json = await res.json();
+        if (!json.ok) {
+          if (json.code === 'AUTH') {
+            setToken('');
+            location.hash = '#/admin';
+            toast('Sesi berakhir. Silakan login kembali.', true);
+          }
+          throw new Error(json.message || 'Gagal memproses data server.');
+        }
+        return json.data;
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    // Helper Kompresi Gambar di Browser sebelum dikirim ke Google Drive
+    function compressImageFile(file, maxWidth, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width;
+            let h = img.height;
+            if (w > maxWidth) {
+              h = Math.round((h * maxWidth) / w);
+              w = maxWidth;
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', quality || 0.8);
+            resolve(dataUrl);
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // =========================================================================
+    // ROUTER & VIEW RENDERING
+    // =========================================================================
+
+    function route() {
+      const hash = location.hash || '#/';
+      if (hash.startsWith('#/admin')) {
+        renderAdminArea(hash);
+      } else {
+        renderPublicArea(hash);
+      }
+    }
+
+    window.addEventListener('hashchange', route);
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!CONFIG.API_URL || CONFIG.API_URL.includes('PASTE_URL')) {
+        document.getElementById('cfg-warn').classList.remove('hide');
+      }
+      route();
+    });
+
+    // -------------------------------------------------------------------------
+    // AREA PUBLIK (BERANDA, FORM PESAN, LACAK)
+    // -------------------------------------------------------------------------
+
+    async function renderPublicArea(hash) {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <header class="pub-header">
+          <div class="wrap row between">
+            <a href="#/" class="brand">
+              <span class="symbol">AR</span>
+              <div>
+                <span class="gold-text">AUTORENT</span> PRO
+              </div>
+            </a>
+            <div class="row gap">
+              <a href="#/" class="btn sm">Katalog Armada</a>
+              <a href="#/lacak" class="btn sm">Lacak Sewa</a>
+              <a href="#/admin" class="btn sm primary">Login Pengelola</a>
+            </div>
+          </div>
+        </header>
+
+        <main id="pub-view" style="flex:1; padding-bottom:50px;">
+          <div class="wrap stack" style="margin-top:24px;">
+            <div class="sk" style="height:320px;"></div>
+          </div>
+        </main>
+
+        <footer style="background:#090A0E; border-top:1px solid var(--gold-border); padding:24px 0; text-align:center;">
+          <div class="wrap">
+            <p class="muted">2026 AutoRent Pro — Solusi Manajemen Rental Mobil Profesional</p>
+          </div>
+        </footer>
+      `;
+
+      try {
+        if (!S.publicInfo) {
+          S.publicInfo = await api('publicInfo');
+        }
+        const v = document.getElementById('pub-view');
+
+        if (hash === '#/lacak') {
+          v.innerHTML = viewPublicTrack();
+        } else if (hash.startsWith('#/pesan')) {
+          const params = new URLSearchParams(hash.split('?')[1] || '');
+          const preCarId = params.get('car') || '';
+          v.innerHTML = viewPublicBooking(preCarId);
+        } else {
+          v.innerHTML = viewPublicHome();
+        }
+      } catch (err) {
+        document.getElementById('pub-view').innerHTML = `
+          <div class="wrap" style="padding:40px 0;">
+            <div class="card" style="text-align:center;">
+              <h3>Gagal Memuat Data Rental</h3>
+              <p class="muted" style="margin-top:8px;">${esc(err.message)}</p>
+              <div style="margin-top:18px;">
+                <button class="btn primary" onclick="location.reload()">Muat Ulang</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function viewPublicHome() {
+      const set = S.publicInfo.settings;
+      const cars = S.publicInfo.cars || [];
+      const readyCars = cars.filter(c => c.Status === 'Tersedia');
+
+      const carCardsHtml = cars.map(c => `
+        <div class="card stack" style="padding:16px;">
+          <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=60')}" class="car-card-img" alt="${esc(c.MerkModel)}">
+          <div class="row between" style="margin-top:10px;">
+            <span class="badge ${c.Status === 'Tersedia' ? 'b-ready' : 'b-rented'}">${esc(c.Status)}</span>
+            <span class="muted" style="font-size:0.8rem;">${esc(c.Tipe || 'Mobil')} / ${esc(c.Tahun)}</span>
+          </div>
+          <div>
+            <h3 style="font-size:1.1rem;">${esc(c.MerkModel)}</h3>
+            <p class="muted" style="font-size:0.82rem; margin-top:2px;">Plat: ${esc(c.PlatNomor)} | ${esc(c.Transmisi)} | Kapasitas: ${esc(c.Kapasitas)} Kursi</p>
+          </div>
+          <div class="inset" style="padding:10px 14px;">
+            <div class="row between">
+              <span class="muted" style="font-size:0.8rem;">Lepas Kunci</span>
+              <strong style="color:var(--gold-light);">${rp(c.HargaPerHari)}<small>/hari</small></strong>
+            </div>
+            <div class="row between" style="margin-top:4px;">
+              <span class="muted" style="font-size:0.8rem;">Pakai Supir</span>
+              <strong>+${rp(c.HargaDriverPerHari)}<small>/hari</small></strong>
+            </div>
+          </div>
+          <div style="margin-top:6px;">
+            ${c.Status === 'Tersedia'
+              ? `<a href="#/pesan?car=${encodeURIComponent(c.ID)}" class="btn primary block">Sewa Unit Ini</a>`
+              : `<button class="btn block" disabled>Sedang Disewa</button>`}
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="wrap stack" style="margin-top:20px;">
+          <!-- Hero Banner -->
+          <div class="card card-highlight stack" style="padding:36px; text-align:center;">
+            <span class="badge b-gold" style="align-self:center;">PREMIUM FLEET & DAILY SERVICE</span>
+            <h1 style="margin-top:12px;"><span class="gold-text">${esc(set.nama_rental)}</span></h1>
+            <p style="max-width:650px; margin:10px auto 0; color:var(--mute); font-size:1.05rem;">
+              ${esc(set.tagline)}
+            </p>
+            <div class="row center gap" style="margin-top:20px;">
+              <a href="#/pesan" class="btn primary">Booking Mobil Sekarang</a>
+              <a href="https://wa.me/${esc(set.wa)}" target="_blank" class="btn">Hubungi WhatsApp Resmi</a>
+            </div>
+          </div>
+
+          <!-- Metrik Ringkas Ketersediaan -->
+          <div class="grid grid-3">
+            <div class="card sm row between">
+              <div>
+                <span class="muted">Total Unit Armada</span>
+                <h3 style="color:var(--gold); font-size:1.5rem; margin-top:4px;">${cars.length} Unit</h3>
+              </div>
+              <span class="badge b-gold">ARMADA</span>
+            </div>
+            <div class="card sm row between">
+              <div>
+                <span class="muted">Unit Siap Pakai (Ready)</span>
+                <h3 style="color:var(--ok); font-size:1.5rem; margin-top:4px;">${readyCars.length} Unit</h3>
+              </div>
+              <span class="badge b-ready">TERSEDIA</span>
+            </div>
+            <div class="card sm row between">
+              <div>
+                <span class="muted">Jam Layanan</span>
+                <h3 style="font-size:1.1rem; margin-top:6px;">${esc(set.jam_operasional)}</h3>
+              </div>
+              <span class="badge b-gold">BUKA</span>
+            </div>
+          </div>
+
+          <!-- Katalog Mobil -->
+          <div class="stack" style="margin-top:10px;">
+            <div class="row between">
+              <h2>Pilihan Armada Siap Jalan</h2>
+              <span class="muted">Unit terawat berkala dengan proteksi asuransi</span>
+            </div>
+            <div class="grid grid-3">
+              ${carCardsHtml || '<p class="muted">Belum ada unit armada yang terdaftar.</p>'}
+            </div>
+          </div>
+
+          <!-- Syarat & Ketentuan Sewa -->
+          <div class="card stack" style="margin-top:16px;">
+            <h3>Syarat & Ketentuan Sewa</h3>
+            <div class="grid grid-2" style="margin-top:10px;">
+              ${(set.syarat_rental || '').split('|').map((sy, i) => `
+                <div class="inset row gap-s" style="align-items:flex-start;">
+                  <span style="color:var(--gold); font-weight:800;">${i+1}.</span>
+                  <span>${esc(sy)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewPublicBooking(preCarId) {
+      const cars = S.publicInfo.cars || [];
+
+      const carOptions = cars.map(c => `
+        <option value="${esc(c.ID)}" data-harga="${c.HargaPerHari}" data-driver="${c.HargaDriverPerHari}" ${c.ID === preCarId ? 'selected' : ''}>
+          ${esc(c.MerkModel)} (${esc(c.PlatNomor)}) — ${rp(c.HargaPerHari)}/hari ${c.Status !== 'Tersedia' ? '['+c.Status+']' : ''}
+        </option>
+      `).join('');
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const tomStr = tomorrow.toISOString().slice(0, 10);
+
+      return `
+        <div class="wrap" style="max-width:800px; margin-top:20px;">
+          <div class="card stack">
+            <div class="row between">
+              <a href="#/" class="btn sm">Kembali ke Katalog</a>
+              <span class="badge b-gold">FORMULIR SEWA ONLINE</span>
+            </div>
+
+            <div style="margin-top:10px;">
+              <h2>Pemesanan Unit Rental</h2>
+              <p class="muted">Lengkapi data di bawah ini untuk reservasi unit mobil. Petugas kami akan memverifikasi ketersediaan armada.</p>
+            </div>
+
+            <form data-form="publicBooking" data-live="calcPublicBooking" class="stack" style="margin-top:16px;">
+              <!-- Honeypot anti bot -->
+              <input type="text" name="hp_website" style="display:none;" tabindex="-1" autocomplete="off">
+
+              <label class="f">
+                <span>Pilih Unit Mobil:</span>
+                <select name="CarID" class="in" required>
+                  <option value="">-- Pilih Mobil --</option>
+                  ${carOptions}
+                </select>
+              </label>
+
+              <label class="f">
+                <span>Pilihan Layanan Paket:</span>
+                <div class="opts">
+                  <label class="opt">
+                    <input type="radio" name="Paket" value="Lepas Kunci" checked>
+                    <span>
+                      <strong>Lepas Kunci</strong>
+                      <small class="muted">Setir mandiri, fleksibilitas penuh</small>
+                    </span>
+                  </label>
+                  <label class="opt">
+                    <input type="radio" name="Paket" value="Dengan Supir">
+                    <span>
+                      <strong>Dengan Supir</strong>
+                      <small class="muted">Layanan supir resmi dan berpengalaman</small>
+                    </span>
+                  </label>
+                </div>
+              </label>
+
+              <div class="grid grid-2">
+                <div>
+                  <label class="f"><span>Tanggal & Jam Mulai:</span></label>
+                  <div class="row gap-s">
+                    <input type="date" name="TglMulai" class="in" value="${todayStr}" required>
+                    <input type="time" name="JamMulai" class="in" value="09:00" style="width:110px;" required>
+                  </div>
+                </div>
+                <div>
+                  <label class="f"><span>Tanggal & Jam Selesai:</span></label>
+                  <div class="row gap-s">
+                    <input type="date" name="TglSelesai" class="in" value="${tomStr}" required>
+                    <input type="time" name="JamSelesai" class="in" value="09:00" style="width:110px;" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="inset stack" style="margin-top:6px;">
+                <h4 style="color:var(--gold);">Data Identitas Penyewa</h4>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>Nama Lengkap:</span>
+                    <input type="text" name="CustomerNama" class="in" placeholder="Nama sesuai KTP" required>
+                  </label>
+                  <label class="f">
+                    <span>Nomor WhatsApp Aktif:</span>
+                    <input type="tel" name="CustomerWA" class="in" placeholder="081234567890" required>
+                  </label>
+                </div>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>Nomor KTP / SIM:</span>
+                    <input type="text" name="CustomerKTP" class="in" placeholder="Nomor identitas kependudukan" required>
+                  </label>
+                  <label class="f">
+                    <span>Alamat Domisili:</span>
+                    <input type="text" name="CustomerAlamat" class="in" placeholder="Kota atau alamat lengkap">
+                  </label>
+                </div>
+                <label class="f">
+                  <span>Jaminan Fisik yang Diserahkan:</span>
+                  <select name="Jaminan" class="in">
+                    <option value="KTP Asli">KTP Asli</option>
+                    <option value="Sepeda Motor + STNK Asli">Sepeda Motor + STNK Asli</option>
+                    <option value="Deposit Tunai">Deposit Tunai</option>
+                    <option value="Lainnya">Lainnya (Konfirmasi ke Admin)</option>
+                  </select>
+                </label>
+                <label class="f">
+                  <span>Catatan atau Rute Perjalanan:</span>
+                  <textarea name="Catatan" class="in" placeholder="Misal: Perjalanan dalam kota / antar kota..."></textarea>
+                </label>
+              </div>
+
+              <!-- Estimasi Biaya Sewa -->
+              <div id="booking-cost-box" class="card card-highlight stack" style="padding:18px;">
+                <h4 style="color:var(--gold-light);">Ringkasan Estimasi Biaya</h4>
+                <div class="row between">
+                  <span class="muted">Durasi Terhitung:</span>
+                  <strong id="bkg-durasi">1 Hari</strong>
+                </div>
+                <div class="row between">
+                  <span class="muted">Biaya Sewa Mobil:</span>
+                  <span id="bkg-biaya-mobil">Rp 0</span>
+                </div>
+                <div class="row between">
+                  <span class="muted">Biaya Jasa Supir:</span>
+                  <span id="bkg-biaya-driver">Rp 0</span>
+                </div>
+                <hr style="border:0; border-top:1px dashed var(--gold-border); margin:4px 0;">
+                <div class="row between" style="font-size:1.15rem;">
+                  <strong class="gold-text">TOTAL ESTIMASI:</strong>
+                  <strong id="bkg-total" style="color:var(--gold-light);">Rp 0</strong>
+                </div>
+              </div>
+
+              <button type="submit" class="btn primary block" style="min-height:50px; font-size:1.02rem;">
+                Ajukan Booking Unit Sekarang
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewPublicTrack() {
+      return `
+        <div class="wrap" style="max-width:650px; margin-top:30px;">
+          <div class="card stack">
+            <h2>Lacak Status Reservasi Sewa</h2>
+            <p class="muted">Ketik Nomor Sewa transaksi dan 4 digit terakhir nomor WhatsApp yang Anda gunakan saat pemesanan.</p>
+
+            <form data-form="trackBooking" class="stack" style="margin-top:16px;">
+              <label class="f">
+                <span>Nomor Sewa Transaksi:</span>
+                <input type="text" name="noSewa" class="in" placeholder="RNT-20261107-001" style="text-transform:uppercase;" required>
+              </label>
+              <label class="f">
+                <span>4 Digit Terakhir No. WhatsApp:</span>
+                <input type="password" name="phone4" class="in" maxlength="4" placeholder="Contoh: 7890" required>
+              </label>
+              <button type="submit" class="btn primary">Periksa Status Sewa</button>
+            </form>
+
+            <div id="track-result" style="margin-top:20px;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // AREA PENGELOLA / ADMIN
+    // -------------------------------------------------------------------------
+
+    async function renderAdminArea(hash) {
+      const app = document.getElementById('app');
+
+      // Cek login admin
+      if (!S.token) {
+        renderAdminLogin();
+        return;
+      }
+
+      app.innerHTML = `
+        <div class="admin-layout">
+          <aside class="admin-sidebar">
+            <div class="brand">
+              <span class="symbol">AR</span>
+              <div>
+                <span class="gold-text">AUTORENT</span> ADMIN
+              </div>
+            </div>
+
+            <nav class="admin-nav">
+              <a href="#/admin/dashboard" class="nav-link ${hash.includes('dashboard') ? 'active' : ''}">
+                Dashboard
+              </a>
+              <a href="#/admin/sewa" class="nav-link ${hash.includes('/sewa') ? 'active' : ''}">
+                Transaksi Sewa
+              </a>
+              <a href="#/admin/armada" class="nav-link ${hash.includes('/armada') ? 'active' : ''}">
+                Master Armada
+              </a>
+              <a href="#/admin/driver" class="nav-link ${hash.includes('/driver') ? 'active' : ''}">
+                Supir / Driver
+              </a>
+              <a href="#/admin/biaya" class="nav-link ${hash.includes('/biaya') ? 'active' : ''}">
+                Biaya & Servis
+              </a>
+              <a href="#/admin/laporan" class="nav-link ${hash.includes('/laporan') ? 'active' : ''}">
+                Laporan Keuangan
+              </a>
+              <a href="#/admin/pengaturan" class="nav-link ${hash.includes('/pengaturan') ? 'active' : ''}">
+                Pengaturan
+              </a>
+            </nav>
+
+            <div style="border-top:1px solid var(--gold-border); padding-top:16px;">
+              <button data-act="logout" class="btn sm danger block">Keluar (Logout)</button>
+            </div>
+          </aside>
+
+          <main class="admin-main">
+            <div class="row between" style="margin-bottom:24px;">
+              <h2 id="adm-title">Panel Pengelola Rental</h2>
+              <div class="row gap">
+                <a href="#/" target="_blank" class="btn sm">Buka Katalog Publik</a>
+                <button data-act="openNewRentalModal" class="btn sm primary">+ Buat Sewa Baru</button>
+              </div>
+            </div>
+
+            <div id="adm-view" class="stack">
+              <div class="sk" style="height:350px;"></div>
+            </div>
+          </main>
+        </div>
+
+        <!-- Navigasi Bawah Layar untuk Ponsel -->
+        <div class="mobile-bottom-nav">
+          <a href="#/admin/dashboard" class="mob-link ${hash.includes('dashboard') ? 'active' : ''}">
+            <span>Dashboard</span>
+          </a>
+          <a href="#/admin/sewa" class="mob-link ${hash.includes('/sewa') ? 'active' : ''}">
+            <span>Sewa</span>
+          </a>
+          <a href="#/admin/armada" class="mob-link ${hash.includes('/armada') ? 'active' : ''}">
+            <span>Armada</span>
+          </a>
+          <a href="#/admin/biaya" class="mob-link ${hash.includes('/biaya') ? 'active' : ''}">
+            <span>Biaya</span>
+          </a>
+          <a href="#/admin/pengaturan" class="mob-link ${hash.includes('/pengaturan') ? 'active' : ''}">
+            <span>Akun</span>
+          </a>
+        </div>
+
+        <div id="modal-container"></div>
+      `;
+
+      try {
+        const v = document.getElementById('adm-view');
+        const titleEl = document.getElementById('adm-title');
+
+        if (hash === '#/admin/dashboard' || hash === '#/admin') {
+          titleEl.textContent = 'Dashboard & Ringkasan Armada';
+          await renderAdminDashboard(v);
+        } else if (hash.startsWith('#/admin/sewa')) {
+          titleEl.textContent = 'Manajemen Transaksi Sewa';
+          await renderAdminRentals(v);
+        } else if (hash.startsWith('#/admin/armada')) {
+          titleEl.textContent = 'Manajemen Unit Mobil';
+          await renderAdminCars(v);
+        } else if (hash.startsWith('#/admin/driver')) {
+          titleEl.textContent = 'Daftar Supir & Penugasan';
+          await renderAdminDrivers(v);
+        } else if (hash.startsWith('#/admin/biaya')) {
+          titleEl.textContent = 'Biaya Operasional & Servis';
+          await renderAdminExpenses(v);
+        } else if (hash.startsWith('#/admin/laporan')) {
+          titleEl.textContent = 'Laporan Keuangan & Omset';
+          await renderAdminReports(v);
+        } else if (hash.startsWith('#/admin/pengaturan')) {
+          titleEl.textContent = 'Pengaturan Bisnis Rental';
+          await renderAdminSettings(v);
+        }
+      } catch (err) {
+        document.getElementById('adm-view').innerHTML = `
+          <div class="card" style="text-align:center;">
+            <h3>Gagal Memuat Data Admin</h3>
+            <p class="muted" style="margin-top:8px;">${esc(err.message)}</p>
+            <div style="margin-top:16px;">
+              <button class="btn primary" onclick="route()">Coba Lagi</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderAdminLogin() {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:radial-gradient(circle at center, #181b26 0%, #0c0d12 100%);">
+          <div class="card stack" style="max-width:420px; width:100%; padding:36px 30px; text-align:center;">
+            <div class="brand center" style="margin-bottom:8px;">
+              <span class="symbol">AR</span>
+              <span class="gold-text">AUTORENT</span>
+            </div>
+            <h2>Login Pengelola</h2>
+            <p class="muted">Masukkan password pengelola untuk mengakses dashboard operasional armada.</p>
+
+            <form data-form="adminLogin" class="stack" style="margin-top:20px; text-align:left;">
+              <label class="f">
+                <span>Password Admin:</span>
+                <input type="password" name="password" class="in" placeholder="Ketik password..." required autofocus>
+              </label>
+              <button type="submit" class="btn primary block" style="min-height:48px;">Masuk ke Dashboard</button>
+            </form>
+            <div style="margin-top:14px;">
+              <a href="#/" class="muted" style="font-size:0.85rem;">Kembali ke Katalog Publik</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: DASHBOARD
+    // -------------------------------------------------------------------------
+
+    async function renderAdminDashboard(el) {
+      const data = await api('dashboard');
+      const sum = data.summary;
+
+      el.innerHTML = `
+        <!-- Metrik Ringkasan Utama -->
+        <div class="grid grid-4">
+          <div class="card sm">
+            <span class="muted">Armada Siap Pakai</span>
+            <div class="row between" style="margin-top:6px;">
+              <h2 style="color:var(--ok);">${sum.carsReady} Unit</h2>
+              <span class="badge b-ready">READY</span>
+            </div>
+            <small class="muted">dari total ${sum.totalCars} armada</small>
+          </div>
+          <div class="card sm">
+            <span class="muted">Sedang Disewa (Jalan)</span>
+            <div class="row between" style="margin-top:6px;">
+              <h2 style="color:var(--warn);">${sum.carsRented} Unit</h2>
+              <span class="badge b-rented">DISEWA</span>
+            </div>
+            <small class="muted">sedang berada di penyewa</small>
+          </div>
+          <div class="card sm">
+            <span class="muted">Omset Bulan Ini</span>
+            <div class="row between" style="margin-top:6px;">
+              <h3 style="color:var(--gold-light);">${rp(sum.omsetBulanIni)}</h3>
+            </div>
+            <small class="muted">total transaksi sewa</small>
+          </div>
+          <div class="card sm">
+            <span class="muted">Piutang Belum Lunas</span>
+            <div class="row between" style="margin-top:6px;">
+              <h3 style="${sum.piutangBulanIni > 0 ? 'color:var(--bad)' : 'color:var(--ok)'};">${rp(sum.piutangBulanIni)}</h3>
+            </div>
+            <small class="muted">sisa tagihan belum dibayar</small>
+          </div>
+        </div>
+
+        <!-- Alert & Early Warning -->
+        <div class="grid grid-2" style="margin-top:16px;">
+          <!-- Alert Kembali Hari Ini -->
+          <div class="card stack">
+            <div class="row between">
+              <h4>Jadwal Kembali Hari Ini (${data.kembaliHariIni.length})</h4>
+              <span class="badge b-gold">HARI INI</span>
+            </div>
+            <div class="stack" style="gap:8px;">
+              ${data.kembaliHariIni.length ? data.kembaliHariIni.map(k => `
+                <div class="inset row between">
+                  <div>
+                    <strong>${esc(k.CustomerNama)}</strong>
+                    <div class="muted" style="font-size:0.8rem;">${esc(k.Mobil)}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <span style="color:var(--gold); font-weight:700;">Jam: ${esc(k.JamKembali)}</span>
+                    <div style="font-size:0.8rem; color:${k.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(k.Sisa)}</div>
+                  </div>
+                </div>
+              `).join('') : '<p class="muted">Tidak ada unit yang jatuh tempo kembali hari ini.</p>'}
+            </div>
+          </div>
+
+          <!-- Alert Terlambat / Overdue -->
+          <div class="card stack" style="border-color:${data.terlambatKembali.length ? 'var(--bad)' : 'var(--gold-border)'};">
+            <div class="row between">
+              <h4>Peringatan Melewati Batas Waktu (${data.terlambatKembali.length})</h4>
+              <span class="badge ${data.terlambatKembali.length ? 'b-service' : 'b-ready'}">OVERDUE</span>
+            </div>
+            <div class="stack" style="gap:8px;">
+              ${data.terlambatKembali.length ? data.terlambatKembali.map(t => `
+                <div class="inset row between" style="border-color:var(--bad);">
+                  <div>
+                    <strong style="color:var(--bad);">${esc(t.CustomerNama)}</strong>
+                    <div class="muted" style="font-size:0.8rem;">${esc(t.Mobil)} (Jadwal: ${esc(t.TglSelesai)} ${esc(t.JamKembali)})</div>
+                  </div>
+                  <a href="https://wa.me/${esc(t.CustomerWA)}?text=Halo%20kak%20${encodeURIComponent(t.CustomerNama)},%20mengingatkan%20jadwal%20sewa%20mobil%20${encodeURIComponent(t.Mobil)}%20telah%20melewati%20batas%20waktu." target="_blank" class="btn sm danger">Chat WhatsApp</a>
+                </div>
+              `).join('') : '<p class="muted">Semua unit tepat waktu. Tidak ada keterlambatan aktif.</p>'}
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert Pajak STNK Jatuh Tempo -->
+        ${data.alertPajak && data.alertPajak.length ? `
+          <div class="card stack" style="border-color:var(--warn); margin-top:16px;">
+            <div class="row between">
+              <h4>Pengingat Pajak STNK (Jatuh Tempo Kurang Dari 30 Hari)</h4>
+              <span class="badge b-rented">${data.alertPajak.length} UNIT</span>
+            </div>
+            <div class="grid grid-3">
+              ${data.alertPajak.map(p => `
+                <div class="inset">
+                  <strong>${esc(p.PlatNomor)}</strong> — ${esc(p.MerkModel)}
+                  <div class="muted" style="font-size:0.8rem; margin-top:4px;">Jatuh tempo: <strong style="color:var(--warn);">${esc(p.JatuhTempoPajak)}</strong></div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Transaksi Terakhir -->
+        <div class="card stack" style="margin-top:20px;">
+          <div class="row between">
+            <h4>Transaksi Sewa Terakhir</h4>
+            <a href="#/admin/sewa" class="btn sm">Lihat Semua Sewa</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--gold-border); text-align:left; color:var(--gold);">
+                  <th style="padding:10px 8px;">No. Sewa</th>
+                  <th style="padding:10px 8px;">Penyewa</th>
+                  <th style="padding:10px 8px;">Mobil</th>
+                  <th style="padding:10px 8px;">Durasi</th>
+                  <th style="padding:10px 8px;">Total</th>
+                  <th style="padding:10px 8px;">Bayar</th>
+                  <th style="padding:10px 8px;">Status Sewa</th>
+                  <th style="padding:10px 8px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.recentRentals && data.recentRentals.length ? data.recentRentals.map(r => `
+                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <td style="padding:10px 8px; font-weight:700;">${esc(r.NoSewa)}</td>
+                    <td style="padding:10px 8px;">${esc(r.CustomerNama)}</td>
+                    <td style="padding:10px 8px;">${esc(r.MobilSnapshot)}</td>
+                    <td style="padding:10px 8px;">${r.DurasiHari} hari</td>
+                    <td style="padding:10px 8px; font-weight:700;">${rp(r.Total)}</td>
+                    <td style="padding:10px 8px;">
+                      <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}">${esc(r.StatusBayar)}</span>
+                    </td>
+                    <td style="padding:10px 8px;">
+                      <span class="badge ${r.StatusSewa === 'Aktif' ? 'b-ready' : r.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(r.StatusSewa)}</span>
+                    </td>
+                    <td style="padding:10px 8px;">
+                      <button data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
+                    </td>
+                  </tr>
+                `).join('') : '<tr><td colspan="8" style="padding:20px; text-align:center;" class="muted">Belum ada transaksi sewa.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: TRANSAKSI SEWA
+    // -------------------------------------------------------------------------
+
+    async function renderAdminRentals(el) {
+      const rentals = await api('listRentals', {});
+      S.cacheRentals = rentals;
+
+      el.innerHTML = `
+        <div class="card stack">
+          <div class="row between">
+            <div class="row gap">
+              <input type="text" id="filter-rental-search" class="in" placeholder="Cari penyewa, plat, no sewa..." style="width:260px;" oninput="applyRentalFilter()">
+              <select id="filter-rental-status" class="in" style="width:180px;" onchange="applyRentalFilter()">
+                <option value="Semua">Semua Status</option>
+                <option value="Booking">Booking</option>
+                <option value="Aktif">Aktif (Sedang Jalan)</option>
+                <option value="Selesai">Selesai</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+              </select>
+            </div>
+            <button data-act="openNewRentalModal" class="btn primary">+ Tambah Sewa Langsung</button>
+          </div>
+
+          <div id="rental-list-table" style="margin-top:16px; overflow-x:auto;">
+            ${buildRentalTableHtml(rentals)}
+          </div>
+        </div>
+      `;
+    }
+
+    function buildRentalTableHtml(list) {
+      if (!list.length) return '<p class="muted" style="padding:24px; text-align:center;">Tidak ada transaksi sewa ditemukan.</p>';
+
+      return `
+        <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--gold-border); text-align:left; color:var(--gold);">
+              <th style="padding:10px 8px;">No. Sewa</th>
+              <th style="padding:10px 8px;">Tgl Sewa</th>
+              <th style="padding:10px 8px;">Penyewa & Kontak</th>
+              <th style="padding:10px 8px;">Mobil & Paket</th>
+              <th style="padding:10px 8px;">Periode Sewa</th>
+              <th style="padding:10px 8px;">Total & Sisa</th>
+              <th style="padding:10px 8px;">Status</th>
+              <th style="padding:10px 8px; text-align:right;">Aksi Cepat</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(r => `
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:10px 8px; font-weight:700;">${esc(r.NoSewa)}</td>
+                <td style="padding:10px 8px;" class="muted">${fmtDate(r.Tanggal)}</td>
+                <td style="padding:10px 8px;">
+                  <strong>${esc(r.CustomerNama)}</strong>
+                  <div class="muted" style="font-size:0.8rem;">WA: ${esc(r.CustomerWA)}</div>
+                </td>
+                <td style="padding:10px 8px;">
+                  <div>${esc(r.MobilSnapshot)}</div>
+                  <span class="badge b-gold" style="font-size:0.7rem;">${esc(r.Paket)}</span>
+                </td>
+                <td style="padding:10px 8px; font-size:0.82rem;">
+                  <div>${esc(r.TglMulai)} s/d ${esc(r.TglSelesai)}</div>
+                  <small class="muted">(${r.DurasiHari} Hari)</small>
+                </td>
+                <td style="padding:10px 8px;">
+                  <div><strong>${rp(r.Total)}</strong></div>
+                  <small style="color:${r.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(r.Sisa)}</small>
+                </td>
+                <td style="padding:10px 8px;">
+                  <span class="badge ${r.StatusSewa === 'Aktif' ? 'b-ready' : r.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(r.StatusSewa)}</span>
+                  <div style="margin-top:2px;">
+                    <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}" style="font-size:0.7rem;">${esc(r.StatusBayar)}</span>
+                  </div>
+                </td>
+                <td style="padding:10px 8px; text-align:right;">
+                  <div class="row gap-s" style="justify-content:flex-end;">
+                    <button data-act="viewRentalDetail" data-id="${esc(r.NoSewa)}" class="btn sm">Detail</button>
+                    ${r.StatusSewa === 'Aktif' ? `
+                      <button data-act="openReturnModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">Proses Return</button>
+                    ` : ''}
+                    ${r.StatusSewa === 'Booking' ? `
+                      <button data-act="activateRental" data-id="${esc(r.NoSewa)}" class="btn sm primary">Serah Terima</button>
+                    ` : ''}
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function applyRentalFilter() {
+      const q = (document.getElementById('filter-rental-search').value || '').toLowerCase();
+      const status = document.getElementById('filter-rental-status').value;
+
+      let list = S.cacheRentals || [];
+      if (status !== 'Semua') {
+        list = list.filter(r => r.StatusSewa === status);
+      }
+      if (q) {
+        list = list.filter(r =>
+          String(r.NoSewa || '').toLowerCase().includes(q) ||
+          String(r.CustomerNama || '').toLowerCase().includes(q) ||
+          String(r.PlatNomor || '').toLowerCase().includes(q) ||
+          String(r.CustomerWA || '').toLowerCase().includes(q)
+        );
+      }
+      document.getElementById('rental-list-table').innerHTML = buildRentalTableHtml(list);
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: MASTER ARMADA (DENGAN UPLOAD GAMBAR)
+    // -------------------------------------------------------------------------
+
+    async function renderAdminCars(el) {
+      const cars = await api('listCars');
+      S.cacheCars = cars;
+
+      el.innerHTML = `
+        <div class="card stack">
+          <div class="row between">
+            <h4>Daftar Unit Armada Mobil (${cars.length} Unit)</h4>
+            <button data-act="openCarModal" class="btn primary">+ Tambah Mobil Baru</button>
+          </div>
+
+          <div class="grid grid-3" style="margin-top:16px;">
+            ${cars.map(c => `
+              <div class="card sm stack" style="border-color:${c.Status === 'Tersedia' ? 'var(--gold-border)' : c.Status === 'Disewa' ? 'var(--warn)' : 'var(--bad)'};">
+                <img src="${esc(c.FotoUrl || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=60')}" class="car-card-img" style="height:140px;" alt="">
+                <div class="row between" style="margin-top:4px;">
+                  <span class="badge ${c.Status === 'Tersedia' ? 'b-ready' : c.Status === 'Disewa' ? 'b-rented' : 'b-service'}">${esc(c.Status)}</span>
+                  <strong style="color:var(--gold-light);">${esc(c.PlatNomor)}</strong>
+                </div>
+                <div>
+                  <h4>${esc(c.MerkModel)}</h4>
+                  <small class="muted">${esc(c.Tipe)} | ${esc(c.Tahun)} | ${esc(c.Transmisi)}</small>
+                </div>
+                <div class="inset" style="padding:8px 12px; font-size:0.84rem;">
+                  <div class="row between">
+                    <span class="muted">Tarif Lepas Kunci:</span>
+                    <strong>${rp(c.HargaPerHari)}</strong>
+                  </div>
+                  <div class="row between">
+                    <span class="muted">KM Terakhir:</span>
+                    <strong>${Number(c.KMAkhir || 0).toLocaleString()} km</strong>
+                  </div>
+                  <div class="row between">
+                    <span class="muted">Pajak STNK:</span>
+                    <strong>${fmtDate(c.JatuhTempoPajak)}</strong>
+                  </div>
+                </div>
+                <div class="row gap-s" style="margin-top:6px;">
+                  <button data-act="editCar" data-id="${esc(c.ID)}" class="btn sm block">Edit Unit & Foto</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: DRIVER / SUPIR
+    // -------------------------------------------------------------------------
+
+    async function renderAdminDrivers(el) {
+      const drivers = await api('listDrivers');
+      el.innerHTML = `
+        <div class="card stack">
+          <div class="row between">
+            <h4>Daftar Supir & Driver (${drivers.length} Orang)</h4>
+            <button data-act="openDriverModal" class="btn primary">+ Tambah Supir Baru</button>
+          </div>
+
+          <div class="grid grid-3" style="margin-top:16px;">
+            ${drivers.map(d => `
+              <div class="card sm stack">
+                <div class="row between">
+                  <span class="badge ${d.Status === 'Tersedia' ? 'b-ready' : d.Status === 'Bertugas' ? 'b-rented' : 'b-service'}">${esc(d.Status)}</span>
+                  <a href="https://wa.me/${esc(d.WhatsApp)}" target="_blank" class="btn sm">Chat WhatsApp</a>
+                </div>
+                <h4 style="margin-top:6px;">${esc(d.Nama)}</h4>
+                <div class="inset" style="padding:8px 12px; font-size:0.84rem;">
+                  <div class="row between">
+                    <span class="muted">Tarif Harian:</span>
+                    <strong style="color:var(--gold-light);">${rp(d.TarifPerHari)}</strong>
+                  </div>
+                  <div class="row between">
+                    <span class="muted">WhatsApp:</span>
+                    <span>${esc(d.WhatsApp)}</span>
+                  </div>
+                </div>
+                <p class="muted" style="font-size:0.82rem;">${esc(d.Catatan || '-')}</p>
+                <button data-act="editDriver" data-id="${esc(d.ID)}" class="btn sm">Edit Data Supir</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: BIAYA OPERASIONAL & SERVIS
+    // -------------------------------------------------------------------------
+
+    async function renderAdminExpenses(el) {
+      const expenses = await api('listExpenses', {});
+      const cars = await api('listCars');
+
+      el.innerHTML = `
+        <div class="grid grid-2">
+          <!-- Form Catat Biaya Baru -->
+          <div class="card stack">
+            <h4>+ Catat Pengeluaran / Servis Mobil</h4>
+            <form data-form="addExpense" class="stack" style="margin-top:12px;">
+              <label class="f">
+                <span>Unit Mobil Terkait (Opsional):</span>
+                <select name="CarID" class="in">
+                  <option value="">-- Pengeluaran Umum / Tidak Terkait Unit --</option>
+                  ${cars.map(c => `<option value="${esc(c.ID)}">${esc(c.MerkModel)} (${esc(c.PlatNomor)})</option>`).join('')}
+                </select>
+              </label>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Tanggal:</span>
+                  <input type="date" name="Tanggal" class="in" value="${new Date().toISOString().slice(0, 10)}" required>
+                </label>
+                <label class="f">
+                  <span>Kategori:</span>
+                  <select name="Kategori" class="in">
+                    <option value="Servis/Bengkel">Servis / Bengkel</option>
+                    <option value="Ganti Oli">Ganti Oli</option>
+                    <option value="BBM Operasional">BBM Operasional</option>
+                    <option value="Cuci Mobil">Cuci Mobil</option>
+                    <option value="Pajak STNK">Pajak STNK / KIR</option>
+                    <option value="Lain-lain">Lain-lain</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Jumlah Pengeluaran:</span>
+                  <input type="number" name="Jumlah" class="in" placeholder="Nominal Rp..." required>
+                </label>
+                <label class="f">
+                  <span>KM Mobil Saat Servis:</span>
+                  <input type="number" name="KMUnit" class="in" placeholder="Contoh: 45000">
+                </label>
+              </div>
+
+              <label class="f">
+                <span>Keterangan Biaya:</span>
+                <input type="text" name="Keterangan" class="in" placeholder="Rincian suku cadang atau servis..." required>
+              </label>
+
+              <button type="submit" class="btn primary">Simpan Biaya</button>
+            </form>
+          </div>
+
+          <!-- Riwayat Pengeluaran -->
+          <div class="card stack">
+            <h4>Riwayat Pengeluaran Operasional</h4>
+            <div style="max-height:480px; overflow-y:auto;" class="stack">
+              ${expenses.length ? expenses.map(e => `
+                <div class="inset row between">
+                  <div>
+                    <strong>${esc(e.Kategori)}</strong> — <span class="muted">${fmtDate(e.Tanggal)}</span>
+                    <div style="font-size:0.84rem; margin-top:2px;">${esc(e.Keterangan)}</div>
+                    ${e.CarID ? `<small class="gold-text">Mobil ID: ${esc(e.CarID)}</small>` : ''}
+                  </div>
+                  <div style="text-align:right;">
+                    <strong style="color:var(--bad);">${rp(e.Jumlah)}</strong>
+                    <div>
+                      <button data-act="deleteExpense" data-id="${esc(e.ID)}" class="btn sm danger" style="padding:2px 8px; min-height:26px; font-size:0.75rem; margin-top:4px;">Hapus</button>
+                    </div>
+                  </div>
+                </div>
+              `).join('') : '<p class="muted">Belum ada pengeluaran yang dicatat.</p>'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: LAPORAN KEUANGAN
+    // -------------------------------------------------------------------------
+
+    async function renderAdminReports(el) {
+      const today = new Date().toISOString().slice(0, 10);
+      const firstDayOfMonth = today.slice(0, 7) + '-01';
+      const rep = await api('report', { dari: firstDayOfMonth, sampai: today });
+
+      el.innerHTML = `
+        <div class="card stack">
+          <div class="row between">
+            <h4>Laporan Laba Rugi Operasional</h4>
+            <div class="row gap">
+              <input type="date" id="rep-dari" class="in" value="${firstDayOfMonth}" style="width:160px;">
+              <span>s/d</span>
+              <input type="date" id="rep-sampai" class="in" value="${today}" style="width:160px;">
+              <button data-act="reloadReport" class="btn primary sm">Filter</button>
+            </div>
+          </div>
+
+          <div class="grid grid-3" style="margin-top:16px;">
+            <div class="card sm">
+              <span class="muted">Total Transaksi Selesai/Aktif</span>
+              <h2 style="color:var(--gold); margin-top:4px;">${rep.transaksiCount} Sewa</h2>
+              <small class="muted">Nilai kontrak: ${rp(rep.totalSewa)}</small>
+            </div>
+            <div class="card sm">
+              <span class="muted">Uang Masuk (Kas Masuk)</span>
+              <h2 style="color:var(--ok); margin-top:4px;">${rp(rep.totalPemasukan)}</h2>
+              <small class="muted">Piutang belum bayar: ${rp(rep.totalPiutang)}</small>
+            </div>
+            <div class="card sm">
+              <span class="muted">Total Beban & Biaya</span>
+              <h2 style="color:var(--bad); margin-top:4px;">${rp(rep.totalBiaya)}</h2>
+              <small class="muted">Servis, bensin, cuci, oli</small>
+            </div>
+          </div>
+
+          <div class="card card-highlight row between" style="margin-top:12px; padding:24px;">
+            <div>
+              <h3>ESTIMASI LABA BERSIH (NET PROFIT)</h3>
+              <p class="muted">Uang Masuk dikurangi Beban Operasional Armada</p>
+            </div>
+            <h1 class="${rep.labaBersih >= 0 ? 'gold-text' : 'text-bad'}">${rp(rep.labaBersih)}</h1>
+          </div>
+
+          <div class="card sm stack" style="margin-top:12px;">
+            <h4>Rincian Beban per Kategori</h4>
+            <div class="grid grid-3" style="margin-top:8px;">
+              ${Object.keys(rep.biayaPerKategori || {}).map(k => `
+                <div class="inset row between">
+                  <span>${esc(k)}</span>
+                  <strong>${rp(rep.biayaPerKategori[k])}</strong>
+                </div>
+              `).join('') || '<p class="muted">Tidak ada data biaya pada periode ini.</p>'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-HALAMAN ADMIN: PENGATURAN & GANTI PASSWORD
+    // -------------------------------------------------------------------------
+
+    async function renderAdminSettings(el) {
+      const set = await api('getSettings');
+
+      el.innerHTML = `
+        <div class="grid grid-2">
+          <!-- Profil & Kontak Rental -->
+          <div class="card stack">
+            <h4>Profil Bisnis Rental</h4>
+            <form data-form="saveSettings" class="stack" style="margin-top:12px;">
+              <label class="f">
+                <span>Nama Bisnis Rental:</span>
+                <input type="text" name="nama_rental" class="in" value="${esc(set.nama_rental || '')}" required>
+              </label>
+              <label class="f">
+                <span>Tagline:</span>
+                <input type="text" name="tagline" class="in" value="${esc(set.tagline || '')}">
+              </label>
+              <label class="f">
+                <span>Alamat Kantor / Pool Mobil:</span>
+                <input type="text" name="alamat" class="in" value="${esc(set.alamat || '')}">
+              </label>
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>No. WhatsApp Resmi:</span>
+                  <input type="tel" name="wa" class="in" value="${esc(set.wa || '')}" required>
+                </label>
+                <label class="f">
+                  <span>Jam Operasional:</span>
+                  <input type="text" name="jam_operasional" class="in" value="${esc(set.jam_operasional || '')}">
+                </label>
+              </div>
+              <label class="f">
+                <span>Rekening Pembayaran / Transfer:</span>
+                <input type="text" name="rekening" class="in" value="${esc(set.rekening || '')}">
+              </label>
+              <label class="f">
+                <span>Syarat & Ketentuan Rental (Pisahkan dengan tanda '|'):</span>
+                <textarea name="syarat_rental" class="in" style="min-height:90px;">${esc(set.syarat_rental || '')}</textarea>
+              </label>
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Denda Overtime (% per jam):</span>
+                  <input type="number" name="denda_per_jam_persen" class="in" value="${esc(set.denda_per_jam_persen || '10')}">
+                </label>
+                <label class="f">
+                  <span>Biaya Antar-Jemput Standar:</span>
+                  <input type="number" name="biaya_antar_jemput_default" class="in" value="${esc(set.biaya_antar_jemput_default || '50000')}">
+                </label>
+              </div>
+              <button type="submit" class="btn primary">Simpan Pengaturan</button>
+            </form>
+          </div>
+
+          <!-- Ganti Password Admin -->
+          <div class="card stack">
+            <h4>Keamanan & Ganti Password</h4>
+            <p class="muted">Pastikan menggunakan kombinasi password yang kuat dan aman.</p>
+            <form data-form="changePassword" class="stack" style="margin-top:12px;">
+              <label class="f">
+                <span>Password Saat Ini:</span>
+                <input type="password" name="oldPassword" class="in" required>
+              </label>
+              <label class="f">
+                <span>Password Baru (Min. 8 karakter):</span>
+                <input type="password" name="newPassword" class="in" minlength="8" required>
+              </label>
+              <label class="f">
+                <span>Ulangi Password Baru:</span>
+                <input type="password" name="confirmPassword" class="in" minlength="8" required>
+              </label>
+              <button type="submit" class="btn primary">Perbarui Password</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // MODAL DIALOGS (DETAIL SEWA, RETURN CHECK, TAMBAH SEWA, INVOICE PRINT)
+    // =========================================================================
+
+    async function showRentalDetailModal(noSewa) {
+      const data = await api('getRental', { noSewa: noSewa });
+      const r = data.rental;
+      const payments = data.payments || [];
+
+      const modalHtml = `
+        <div class="ov" data-act="closeModal">
+          <div class="modal stack" onclick="event.stopPropagation()">
+            <div class="row between">
+              <div>
+                <span class="badge b-gold">${esc(r.NoSewa)}</span>
+                <h3 style="margin-top:4px;">Detail Transaksi Sewa</h3>
+              </div>
+              <button data-act="closeModal" class="btn sm">Tutup</button>
+            </div>
+
+            <!-- Printable Box untuk Invoice / Surat Jalan -->
+            <div id="printable-area" class="card stack" style="background:#090A0E; padding:18px;">
+              <div class="row between" style="border-bottom:1px solid var(--gold-border); padding-bottom:10px;">
+                <div>
+                  <h4 class="gold-text">INVOICE & SURAT JALAN RENTAL</h4>
+                  <small class="muted">No: ${esc(r.NoSewa)} | Tgl: ${fmtDate(r.Tanggal)}</small>
+                </div>
+                <div style="text-align:right;">
+                  <span class="badge ${r.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}">${esc(r.StatusBayar)}</span>
+                </div>
+              </div>
+
+              <div class="grid grid-2" style="font-size:0.88rem; margin-top:8px;">
+                <div>
+                  <strong>Data Penyewa:</strong>
+                  <div>${esc(r.CustomerNama)}</div>
+                  <div class="muted">WA: ${esc(r.CustomerWA)}</div>
+                  <div class="muted">KTP: ${esc(r.CustomerKTP || '-')}</div>
+                  <div class="muted">Jaminan: ${esc(r.Jaminan || '-')}</div>
+                </div>
+                <div>
+                  <strong>Unit Armada:</strong>
+                  <div>${esc(r.MobilSnapshot)}</div>
+                  <div class="muted">Paket: ${esc(r.Paket)}</div>
+                  <div class="muted">Periode: ${esc(r.TglMulai)} s/d ${esc(r.TglSelesai)} (${r.DurasiHari} hari)</div>
+                </div>
+              </div>
+
+              <div class="inset stack" style="margin-top:10px; font-size:0.86rem;">
+                <div class="row between">
+                  <span>Biaya Sewa Mobil (${r.DurasiHari} hari):</span>
+                  <strong>${rp(r.BiayaMobil)}</strong>
+                </div>
+                ${r.BiayaDriver > 0 ? `
+                  <div class="row between">
+                    <span>Biaya Supir:</span>
+                    <strong>${rp(r.BiayaDriver)}</strong>
+                  </div>
+                ` : ''}
+                ${r.BiayaAntarJemput > 0 ? `
+                  <div class="row between">
+                    <span>Biaya Antar/Jemput:</span>
+                    <strong>${rp(r.BiayaAntarJemput)}</strong>
+                  </div>
+                ` : ''}
+                ${r.Denda > 0 ? `
+                  <div class="row between" style="color:var(--bad);">
+                    <span>Denda / Kerusakan:</span>
+                    <strong>+${rp(r.Denda)}</strong>
+                  </div>
+                ` : ''}
+                <hr style="border:0; border-top:1px dashed var(--gold-border); margin:4px 0;">
+                <div class="row between" style="font-size:1rem;">
+                  <strong class="gold-text">TOTAL SEWA:</strong>
+                  <strong style="color:var(--gold-light);">${rp(r.Total)}</strong>
+                </div>
+                <div class="row between">
+                  <span class="muted">Telah Dibayar:</span>
+                  <strong style="color:var(--ok);">${rp(r.Dibayar)}</strong>
+                </div>
+                <div class="row between">
+                  <span class="muted">Sisa Tagihan:</span>
+                  <strong style="${r.Sisa > 0 ? 'color:var(--bad)' : 'color:var(--ok)'};">${rp(r.Sisa)}</strong>
+                </div>
+              </div>
+
+              <div class="row between" style="font-size:0.8rem; margin-top:8px;">
+                <span>Kondisi Awal: <strong>KM ${Number(r.KMAwal || 0).toLocaleString()} (BBM: ${esc(r.BBMAwal)})</strong></span>
+                ${r.KMAkhir > 0 ? `<span>Kondisi Kembali: <strong>KM ${Number(r.KMAkhir).toLocaleString()} (BBM: ${esc(r.BBMAkhir)})</strong></span>` : ''}
+              </div>
+            </div>
+
+            <!-- Tombol Aksi Tambahan -->
+            <div class="row between gap" style="margin-top:10px;">
+              <div class="row gap-s">
+                <button onclick="window.print()" class="btn sm">Cetak Invoice</button>
+                <a href="https://wa.me/${esc(r.CustomerWA)}?text=Halo%20${encodeURIComponent(r.CustomerNama)},%20berikut%20rincian%20sewa%20mobil%20${encodeURIComponent(r.MobilSnapshot)}%20(No:%20${encodeURIComponent(r.NoSewa)}).%20Total:%20${encodeURIComponent(rp(r.Total))},%20Sisa:%20${encodeURIComponent(rp(r.Sisa))}." target="_blank" class="btn sm">Kirim WhatsApp</a>
+              </div>
+              <div class="row gap-s">
+                ${r.Sisa > 0 ? `
+                  <button data-act="openAddPaymentModal" data-id="${esc(r.NoSewa)}" class="btn sm primary">+ Bayar</button>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Log Riwayat Pembayaran -->
+            <div class="stack" style="margin-top:14px; max-height:180px; overflow-y:auto;">
+              <small class="muted">Riwayat Pembayaran:</small>
+              ${payments.length ? payments.map(p => `
+                <div class="inset row between" style="padding:6px 12px; font-size:0.82rem;">
+                  <span>${fmtDate(p.Waktu)} — ${esc(p.Metode)} (${esc(p.Catatan || '-')})</span>
+                  <strong style="color:var(--ok);">${rp(p.Jumlah)}</strong>
+                </div>
+              `).join('') : '<small class="muted">Belum ada riwayat pembayaran.</small>'}
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-container').innerHTML = modalHtml;
+    }
+
+    async function showReturnModal(noSewa) {
+      const data = await api('getRental', { noSewa: noSewa });
+      const r = data.rental;
+
+      const modalHtml = `
+        <div class="ov" data-act="closeModal">
+          <div class="modal stack" onclick="event.stopPropagation()">
+            <div class="row between">
+              <div>
+                <span class="badge b-service">CHECKLIST PENGEMBALIAN</span>
+                <h3 style="margin-top:4px;">Pengembalian Unit Mobil</h3>
+              </div>
+              <button data-act="closeModal" class="btn sm">Tutup</button>
+            </div>
+
+            <div class="inset stack" style="font-size:0.88rem;">
+              <div class="row between">
+                <span class="muted">Unit:</span>
+                <strong>${esc(r.MobilSnapshot)}</strong>
+              </div>
+              <div class="row between">
+                <span class="muted">Penyewa:</span>
+                <strong>${esc(r.CustomerNama)} (${esc(r.CustomerWA)})</strong>
+              </div>
+              <div class="row between">
+                <span class="muted">KM Awal:</span>
+                <strong>${Number(r.KMAwal || 0).toLocaleString()} km</strong>
+              </div>
+              <div class="row between">
+                <span class="muted">Jadwal Selesai:</span>
+                <strong>${esc(r.TglSelesai)} ${esc(r.JamSelesai)}</strong>
+              </div>
+            </div>
+
+            <form data-form="submitReturnRental" class="stack" style="margin-top:10px;">
+              <input type="hidden" name="noSewa" value="${esc(r.NoSewa)}">
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>KM Akhir Mobil:</span>
+                  <input type="number" name="KMAkhir" class="in" value="${Number(r.KMAwal || 0) + 50}" min="${Number(r.KMAwal || 0)}" required>
+                </label>
+                <label class="f">
+                  <span>BBM Saat Kembali:</span>
+                  <select name="BBMAkhir" class="in">
+                    <option value="Full">Full</option>
+                    <option value="3/4">3/4 Tangki</option>
+                    <option value="1/2">1/2 Tangki</option>
+                    <option value="1/4">1/4 Tangki</option>
+                    <option value="Kurang">Kurang (Denda BBM)</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Denda Keterlambatan (Overtime):</span>
+                  <input type="number" name="DendaOvertime" class="in" value="0">
+                </label>
+                <label class="f">
+                  <span>Denda BBM / Bodi Lecet:</span>
+                  <input type="number" name="DendaLain" class="in" value="0">
+                </label>
+              </div>
+
+              <label class="f">
+                <span>Catatan Pemeriksaan Kondisi Fisik:</span>
+                <input type="text" name="KondisiKembali" class="in" value="Bodi mulus, interior bersih, ban cadangan aman">
+              </label>
+
+              <div class="inset stack" style="margin-top:6px;">
+                <div class="row between">
+                  <span class="muted">Sisa Tagihan Pokok:</span>
+                  <strong>${rp(r.Sisa)}</strong>
+                </div>
+                <label class="f" style="margin-top:8px;">
+                  <span>Pelunasan Sisa & Denda Saat Ini (Rp):</span>
+                  <input type="number" name="BayarPelunasan" class="in" value="${r.Sisa}" placeholder="Nominal pelunasan...">
+                </label>
+                <label class="f">
+                  <span>Metode Pelunasan:</span>
+                  <select name="MetodePelunasan" class="in">
+                    <option value="Transfer Bank">Transfer Bank</option>
+                    <option value="Tunai/Cash">Tunai / Cash</option>
+                    <option value="QRIS">QRIS</option>
+                  </select>
+                </label>
+              </div>
+
+              <button type="submit" class="btn primary block" style="min-height:48px;">
+                Konfirmasi Pengembalian Mobil Selesai
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-container').innerHTML = modalHtml;
+    }
+
+    async function showNewRentalModal() {
+      const cars = await api('listCars');
+      const drivers = await api('listDrivers');
+
+      const modalHtml = `
+        <div class="ov" data-act="closeModal">
+          <div class="modal stack" onclick="event.stopPropagation()">
+            <div class="row between">
+              <h3>Buat Transaksi Sewa Baru (Admin)</h3>
+              <button data-act="closeModal" class="btn sm">Tutup</button>
+            </div>
+
+            <form data-form="createAdminRental" class="stack" style="margin-top:10px;">
+              <label class="f">
+                <span>Pilih Unit Mobil:</span>
+                <select name="CarID" class="in" required>
+                  <option value="">-- Pilih Mobil Tersedia --</option>
+                  ${cars.map(c => `
+                    <option value="${esc(c.ID)}" ${c.Status !== 'Tersedia' ? 'disabled' : ''}>
+                      ${esc(c.MerkModel)} (${esc(c.PlatNomor)}) — ${rp(c.HargaPerHari)}/hari [${esc(c.Status)}]
+                    </option>
+                  `).join('')}
+                </select>
+              </label>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Paket:</span>
+                  <select name="Paket" class="in" id="adm-paket-sel">
+                    <option value="Lepas Kunci">Lepas Kunci</option>
+                    <option value="Dengan Supir">Dengan Supir</option>
+                  </select>
+                </label>
+                <label class="f">
+                  <span>Pilih Driver (Jika Pakai Supir):</span>
+                  <select name="DriverID" class="in">
+                    <option value="">-- Tanpa Supir / Lepas Kunci --</option>
+                    ${drivers.map(d => `<option value="${esc(d.ID)}">${esc(d.Nama)} (${rp(d.TarifPerHari)})</option>`).join('')}
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid grid-2">
+                <div>
+                  <label class="f"><span>Mulai:</span></label>
+                  <div class="row gap-s">
+                    <input type="date" name="TglMulai" class="in" value="${new Date().toISOString().slice(0, 10)}" required>
+                    <input type="time" name="JamMulai" class="in" value="09:00" style="width:105px;" required>
+                  </div>
+                </div>
+                <div>
+                  <label class="f"><span>Selesai:</span></label>
+                  <div class="row gap-s">
+                    <input type="date" name="TglSelesai" class="in" value="${new Date(Date.now() + 86400000).toISOString().slice(0, 10)}" required>
+                    <input type="time" name="JamSelesai" class="in" value="09:00" style="width:105px;" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="inset stack" style="margin-top:4px;">
+                <h4 style="color:var(--gold);">Penyewa & Jaminan</h4>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>Nama Penyewa:</span>
+                    <input type="text" name="CustomerNama" class="in" required>
+                  </label>
+                  <label class="f">
+                    <span>No. WhatsApp:</span>
+                    <input type="tel" name="CustomerWA" class="in" required>
+                  </label>
+                </div>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>No. KTP/SIM:</span>
+                    <input type="text" name="CustomerKTP" class="in">
+                  </label>
+                  <label class="f">
+                    <span>Jaminan Fisik:</span>
+                    <input type="text" name="Jaminan" class="in" value="KTP Asli">
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>DP / Pembayaran Awal (Rp):</span>
+                  <input type="number" name="DibayarAwal" class="in" value="0">
+                </label>
+                <label class="f">
+                  <span>Status Sewa Langsung:</span>
+                  <select name="StatusSewa" class="in">
+                    <option value="Aktif">Aktif (Mobil Langsung Keluar)</option>
+                    <option value="Booking">Booking (Reservasi)</option>
+                  </select>
+                </label>
+              </div>
+
+              <button type="submit" class="btn primary block">Simpan Transaksi Sewa</button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-container').innerHTML = modalHtml;
+    }
+
+    // =========================================================================
+    // MODAL ARMADA MOBIL (DENGAN DUKUNGAN UPLOAD FOTO KE GOOGLE DRIVE)
+    // =========================================================================
+
+    function openCarModalHtml(c) {
+      const isEdit = !!c;
+      const title = isEdit ? 'Edit Unit Mobil — ' + esc(c.PlatNomor) : 'Tambah Unit Mobil Baru';
+      const curImg = c ? (c.FotoUrl || '') : '';
+
+      return `
+        <div class="ov" data-act="closeModal">
+          <div class="modal stack" onclick="event.stopPropagation()">
+            <div class="row between">
+              <h3>${title}</h3>
+              <button data-act="closeModal" class="btn sm">Tutup</button>
+            </div>
+            <form data-form="saveCar" class="stack" style="margin-top:10px;">
+              ${isEdit ? `<input type="hidden" name="ID" value="${esc(c.ID)}">` : ''}
+              <input type="hidden" name="ImageBase64" id="car-image-base64" value="">
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Plat Nomor:</span>
+                  <input type="text" name="PlatNomor" class="in" value="${isEdit ? esc(c.PlatNomor) : ''}" placeholder="Contoh: B 1234 SAA" required style="text-transform:uppercase;">
+                </label>
+                <label class="f">
+                  <span>Merk & Tipe:</span>
+                  <input type="text" name="MerkModel" class="in" value="${isEdit ? esc(c.MerkModel) : ''}" placeholder="Toyota Innova Reborn" required>
+                </label>
+              </div>
+
+              <div class="grid grid-3">
+                <label class="f">
+                  <span>Kategori:</span>
+                  <input type="text" name="Tipe" class="in" value="${isEdit ? esc(c.Tipe) : 'MPV'}">
+                </label>
+                <label class="f">
+                  <span>Tahun:</span>
+                  <input type="text" name="Tahun" class="in" value="${isEdit ? esc(c.Tahun) : '2023'}">
+                </label>
+                <label class="f">
+                  <span>Transmisi:</span>
+                  <select name="Transmisi" class="in">
+                    <option value="Automatic" ${isEdit && c.Transmisi === 'Automatic' ? 'selected' : ''}>Automatic</option>
+                    <option value="Manual" ${isEdit && c.Transmisi === 'Manual' ? 'selected' : ''}>Manual</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>Tarif Sewa/Hari (Lepas Kunci):</span>
+                  <input type="number" name="HargaPerHari" class="in" value="${isEdit ? c.HargaPerHari : 500000}" required>
+                </label>
+                <label class="f">
+                  <span>Tarif Jasa Supir/Hari:</span>
+                  <input type="number" name="HargaDriverPerHari" class="in" value="${isEdit ? c.HargaDriverPerHari : 150000}">
+                </label>
+              </div>
+
+              <div class="grid grid-2">
+                <label class="f">
+                  <span>KM Terakhir Unit:</span>
+                  <input type="number" name="KMAkhir" class="in" value="${isEdit ? c.KMAkhir : 30000}">
+                </label>
+                <label class="f">
+                  <span>Jatuh Tempo Pajak STNK:</span>
+                  <input type="date" name="JatuhTempoPajak" class="in" value="${isEdit ? fmtDate(c.JatuhTempoPajak) : ''}">
+                </label>
+              </div>
+
+              ${isEdit ? `
+                <label class="f">
+                  <span>Status Armada:</span>
+                  <select name="Status" class="in">
+                    <option value="Tersedia" ${c.Status === 'Tersedia' ? 'selected' : ''}>Tersedia</option>
+                    <option value="Disewa" ${c.Status === 'Disewa' ? 'selected' : ''}>Disewa</option>
+                    <option value="Perawatan" ${c.Status === 'Perawatan' ? 'selected' : ''}>Perawatan</option>
+                    <option value="Nonaktif" ${c.Status === 'Nonaktif' ? 'selected' : ''}>Nonaktif</option>
+                  </select>
+                </label>
+              ` : ''}
+
+              <!-- Bagian Upload Gambar Mobil -->
+              <div class="inset stack">
+                <h4 style="color:var(--gold);">Foto Armada Mobil</h4>
+                <p class="muted" style="font-size:0.83rem;">Pilih foto mobil dari laptop/HP Anda. Foto otomatis disimpan ke Google Drive.</p>
+
+                <div class="img-upload-box" onclick="document.getElementById('car-file-input').click()">
+                  <input type="file" id="car-file-input" accept="image/*" style="display:none;" onchange="handleCarFileSelect(this)">
+                  <div style="font-weight:600; color:var(--gold-light);">+ Pilih Foto dari Perangkat (Galeri / Kamera)</div>
+                  <small class="muted">Format JPG, PNG, atau WEBP</small>
+                </div>
+
+                <div id="img-preview-box">
+                  ${curImg ? `<img src="${esc(curImg)}" class="preview-thumbnail" id="car-preview-img" alt="Pratinjau Foto">` : '<img id="car-preview-img" class="preview-thumbnail hide" alt="Pratinjau Foto">'}
+                </div>
+
+                <label class="f" style="margin-top:6px;">
+                  <span class="muted" style="font-size:0.8rem;">Atau Masukkan URL Gambar (Opsional):</span>
+                  <input type="url" name="FotoUrl" id="car-url-input" class="in" value="${esc(curImg)}" placeholder="https://...">
+                </label>
+              </div>
+
+              <div class="row between">
+                <button type="submit" class="btn primary" id="car-submit-btn">Simpan Mobil</button>
+                ${isEdit ? `<button type="button" data-act="deleteCar" data-id="${esc(c.ID)}" class="btn danger">Nonaktifkan</button>` : ''}
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    async function handleCarFileSelect(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      try {
+        const previewImg = document.getElementById('car-preview-img');
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.classList.remove('hide');
+
+        // Kompresi di browser (max lebar 1000px, kualitas 80%) agar upload sekejap
+        const base64 = await compressImageFile(file, 1000, 0.8);
+        document.getElementById('car-image-base64').value = base64;
+        toast('Foto dipilih dan siap diunggah saat Anda menekan tombol Simpan.');
+      } catch (err) {
+        toast('Gagal memproses gambar: ' + err.message, true);
+      }
+    }
+
+    // =========================================================================
+    // EVENT DELEGATION & FORM HANDLERS
+    // =========================================================================
+
+    const ACT = {
+      logout: () => {
+        setToken('');
+        location.hash = '#/admin';
+        toast('Anda telah keluar.');
+      },
+      closeModal: () => {
+        document.getElementById('modal-container').innerHTML = '';
+      },
+      viewRentalDetail: (btn) => {
+        showRentalDetailModal(btn.dataset.id);
+      },
+      openReturnModal: (btn) => {
+        showReturnModal(btn.dataset.id);
+      },
+      openNewRentalModal: () => {
+        showNewRentalModal();
+      },
+      activateRental: async (btn) => {
+        if (!confirm('Apakah mobil siap diserahterimakan dan status diaktifkan?')) return;
+        try {
+          await api('updateRentalStatus', { noSewa: btn.dataset.id, status: 'Aktif' });
+          toast('Sewa diaktifkan. Status armada otomatis berubah menjadi DISEWA.');
+          route();
+        } catch (e) { toast(e.message, true); }
+      },
+      openAddPaymentModal: (btn) => {
+        const noSewa = btn.dataset.id;
+        const jml = prompt('Masukkan nominal pembayaran angsuran/pelunasan (Rp):');
+        if (!jml || isNaN(jml) || Number(jml) <= 0) return;
+        api('addPayment', { noSewa: noSewa, jumlah: Number(jml), metode: 'Transfer/Tunai' })
+          .then(() => {
+            toast('Pembayaran berhasil dicatat.');
+            showRentalDetailModal(noSewa);
+          })
+          .catch(e => toast(e.message, true));
+      },
+      openCarModal: () => {
+        document.getElementById('modal-container').innerHTML = openCarModalHtml(null);
+      },
+      editCar: (btn) => {
+        const id = btn.dataset.id;
+        const c = (S.cacheCars || []).find(item => item.ID === id);
+        if (!c) return;
+        document.getElementById('modal-container').innerHTML = openCarModalHtml(c);
+      },
+      deleteCar: async (btn) => {
+        if (!confirm('Nonaktifkan mobil ini? Unit tidak akan muncul di katalog publik.')) return;
+        try {
+          await api('deleteCar', { id: btn.dataset.id });
+          toast('Mobil dinonaktifkan.');
+          ACT.closeModal();
+          route();
+        } catch (e) { toast(e.message, true); }
+      },
+      deleteExpense: async (btn) => {
+        if (!confirm('Hapus catatan pengeluaran ini?')) return;
+        try {
+          await api('deleteExpense', { id: btn.dataset.id });
+          toast('Pengeluaran dihapus.');
+          route();
+        } catch (e) { toast(e.message, true); }
+      },
+      openDriverModal: () => {
+        const modalHtml = `
+          <div class="ov" data-act="closeModal">
+            <div class="modal stack" onclick="event.stopPropagation()">
+              <div class="row between">
+                <h3>Tambah Supir Baru</h3>
+                <button data-act="closeModal" class="btn sm">Tutup</button>
+              </div>
+              <form data-form="saveDriver" class="stack" style="margin-top:10px;">
+                <label class="f">
+                  <span>Nama Supir:</span>
+                  <input type="text" name="Nama" class="in" required>
+                </label>
+                <div class="grid grid-2">
+                  <label class="f">
+                    <span>No. WhatsApp:</span>
+                    <input type="tel" name="WhatsApp" class="in" placeholder="0812..." required>
+                  </label>
+                  <label class="f">
+                    <span>Tarif Harian (Rp):</span>
+                    <input type="number" name="TarifPerHari" class="in" value="150000">
+                  </label>
+                </div>
+                <label class="f">
+                  <span>Catatan Pengalaman:</span>
+                  <input type="text" name="Catatan" class="in" placeholder="Pengalaman luar kota / SIM B1...">
+                </label>
+                <button type="submit" class="btn primary block">Simpan Supir</button>
+              </form>
+            </div>
+          </div>
+        `;
+        document.getElementById('modal-container').innerHTML = modalHtml;
+      },
+      editDriver: (btn) => {
+        const id = btn.dataset.id;
+        api('listDrivers').then(drivers => {
+          const d = drivers.find(item => item.ID === id);
+          if (!d) return;
+          const modalHtml = `
+            <div class="ov" data-act="closeModal">
+              <div class="modal stack" onclick="event.stopPropagation()">
+                <div class="row between">
+                  <h3>Edit Supir — ${esc(d.Nama)}</h3>
+                  <button data-act="closeModal" class="btn sm">Tutup</button>
+                </div>
+                <form data-form="saveDriver" class="stack" style="margin-top:10px;">
+                  <input type="hidden" name="ID" value="${esc(d.ID)}">
+                  <label class="f">
+                    <span>Nama Supir:</span>
+                    <input type="text" name="Nama" class="in" value="${esc(d.Nama)}" required>
+                  </label>
+                  <div class="grid grid-2">
+                    <label class="f">
+                      <span>No. WhatsApp:</span>
+                      <input type="tel" name="WhatsApp" class="in" value="${esc(d.WhatsApp)}" required>
+                    </label>
+                    <label class="f">
+                      <span>Tarif Harian:</span>
+                      <input type="number" name="TarifPerHari" class="in" value="${d.TarifPerHari}">
+                    </label>
+                  </div>
+                  <label class="f">
+                    <span>Status Supir:</span>
+                    <select name="Status" class="in">
+                      <option value="Tersedia" ${d.Status === 'Tersedia' ? 'selected' : ''}>Tersedia</option>
+                      <option value="Bertugas" ${d.Status === 'Bertugas' ? 'selected' : ''}>Bertugas</option>
+                      <option value="Libur" ${d.Status === 'Libur' ? 'selected' : ''}>Libur</option>
+                    </select>
+                  </label>
+                  <button type="submit" class="btn primary block">Perbarui Data Supir</button>
+                </form>
+              </div>
+            </div>
+          `;
+          document.getElementById('modal-container').innerHTML = modalHtml;
+        });
+      },
+      reloadReport: () => {
+        const dari = document.getElementById('rep-dari').value;
+        const sampai = document.getElementById('rep-sampai').value;
+        api('report', { dari: dari, sampai: sampai }).then(rep => {
+          renderAdminReports(document.getElementById('adm-view'));
+        });
+      }
+    };
+
+    // FORM HANDLERS
+    const FORMS = {
+      adminLogin: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        const res = await api('login', val);
+        setToken(res.token);
+        toast('Login berhasil. Selamat datang di AutoRent Pro.');
+        location.hash = '#/admin/dashboard';
+      },
+      publicBooking: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        const res = await api('createPublicBooking', val);
+        toast('Booking berhasil diajukan.');
+        const waMsg = `Halo Admin AutoRent, saya ingin konfirmasi booking mobil ${res.mobil} (${res.platNomor}) dengan No. Sewa: ${res.noSewa}. Total estimasi: ${rp(res.total)}.`;
+        const waUrl = `https://wa.me/${esc(S.publicInfo.settings.wa)}?text=${encodeURIComponent(waMsg)}`;
+
+        document.getElementById('pub-view').innerHTML = `
+          <div class="wrap" style="max-width:650px; margin-top:30px;">
+            <div class="card card-highlight stack" style="text-align:center; padding:36px;">
+              <h2>Permohonan Booking Berhasil Terkirim</h2>
+              <p class="muted">Terima kasih atas pemesanan Anda, <strong>${esc(res.customerNama)}</strong>. Permohonan sewa mobil telah tercatat di sistem kami.</p>
+              
+              <div class="inset stack" style="margin:20px 0; padding:18px;">
+                <span class="muted">Nomor Transaksi Sewa:</span>
+                <h2 class="gold-text" style="font-size:1.8rem;">${esc(res.noSewa)}</h2>
+                <small class="muted">Simpan No. Sewa ini untuk memeriksa status persetujuan.</small>
+              </div>
+
+              <div class="stack" style="gap:10px;">
+                <a href="${waUrl}" target="_blank" class="btn primary block" style="min-height:50px;">
+                  Konfirmasi Otomatis ke WhatsApp Admin
+                </a>
+                <a href="#/lacak" class="btn block">Lacak Status Booking</a>
+                <a href="#/" class="btn sm">Kembali ke Beranda</a>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      trackBooking: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        const res = await api('trackBooking', val);
+        document.getElementById('track-result').innerHTML = `
+          <div class="inset stack" style="margin-top:14px;">
+            <div class="row between">
+              <span class="badge b-gold">${esc(res.NoSewa)}</span>
+              <span class="badge ${res.StatusSewa === 'Aktif' ? 'b-ready' : res.StatusSewa === 'Booking' ? 'b-rented' : 'b-gold'}">${esc(res.StatusSewa)}</span>
+            </div>
+            <h3 style="margin-top:4px;">${esc(res.Mobil)}</h3>
+            <div class="muted" style="font-size:0.86rem;">Penyewa: <strong>${esc(res.CustomerNama)}</strong> | Paket: ${esc(res.Paket)}</div>
+            <div class="muted" style="font-size:0.86rem;">Periode: ${esc(res.TglMulai)} s/d ${esc(res.TglSelesai)}</div>
+            
+            <div class="card sm row between" style="margin-top:8px;">
+              <div>
+                <span class="muted">Total Biaya:</span>
+                <div><strong>${rp(res.Total)}</strong></div>
+              </div>
+              <div style="text-align:right;">
+                <span class="badge ${res.StatusBayar === 'Lunas' ? 'b-ready' : 'b-rented'}">${esc(res.StatusBayar)}</span>
+                <div style="font-size:0.82rem; margin-top:2px; color:${res.Sisa > 0 ? 'var(--bad)' : 'var(--ok)'};">Sisa: ${rp(res.Sisa)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      createAdminRental: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('createRental', val);
+        toast('Transaksi sewa berhasil dibuat.');
+        ACT.closeModal();
+        route();
+      },
+      submitReturnRental: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('returnRental', val);
+        toast('Pengembalian unit berhasil dicatat. Status mobil kembali Tersedia.');
+        ACT.closeModal();
+        route();
+      },
+      saveCar: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('saveCar', val);
+        toast('Data mobil dan foto berhasil disimpan.');
+        ACT.closeModal();
+        S.publicInfo = null; // Invalidate cache
+        route();
+      },
+      saveDriver: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('saveDriver', val);
+        toast('Data supir berhasil disimpan.');
+        ACT.closeModal();
+        route();
+      },
+      addExpense: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('addExpense', val);
+        toast('Pengeluaran berhasil dicatat.');
+        route();
+      },
+      saveSettings: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        await api('saveSettings', val);
+        toast('Pengaturan rental berhasil diperbarui.');
+        S.publicInfo = null;
+      },
+      changePassword: async (f) => {
+        const val = Object.fromEntries(new FormData(f));
+        if (val.newPassword !== val.confirmPassword) {
+          throw new Error('Konfirmasi password baru tidak cocok.');
+        }
+        await api('changePassword', val);
+        toast('Password berhasil diubah. Silakan login kembali.');
+        ACT.logout();
+      }
+    };
+
+    // LIVE CALCULATION HANDLER
+    const LIVE = {
+      calcPublicBooking: (f) => {
+        try {
+          const carSel = f.querySelector('select[name="CarID"]');
+          const opt = carSel.options[carSel.selectedIndex];
+          const hrgMobil = Number(opt ? opt.dataset.harga || 0 : 0);
+          const hrgDriver = Number(opt ? opt.dataset.driver || 0 : 0);
+
+          const paket = f.querySelector('input[name="Paket"]:checked').value;
+          const tglMulai = f.querySelector('input[name="TglMulai"]').value;
+          const jamMulai = f.querySelector('input[name="JamMulai"]').value || '09:00';
+          const tglSelesai = f.querySelector('input[name="TglSelesai"]').value;
+          const jamSelesai = f.querySelector('input[name="JamSelesai"]').value || '09:00';
+
+          let durasi = 1;
+          if (tglMulai && tglSelesai) {
+            const d1 = new Date(tglMulai + 'T' + jamMulai + ':00');
+            const d2 = new Date(tglSelesai + 'T' + jamSelesai + ':00');
+            const diffHours = (d2 - d1) / (1000 * 60 * 60);
+            if (diffHours > 0) {
+              durasi = Math.max(1, Math.ceil((diffHours - 1) / 24));
+            }
+          }
+
+          const biayaMobil = durasi * hrgMobil;
+          const biayaDriver = (paket === 'Dengan Supir') ? (durasi * hrgDriver) : 0;
+          const total = biayaMobil + biayaDriver;
+
+          document.getElementById('bkg-durasi').textContent = durasi + ' Hari';
+          document.getElementById('bkg-biaya-mobil').textContent = rp(biayaMobil);
+          document.getElementById('bkg-biaya-driver').textContent = rp(biayaDriver);
+          document.getElementById('bkg-total').textContent = rp(total);
+        } catch(e) {}
+      }
+    };
+
+    // GLOBAL EVENT DELEGATION
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-act]');
+      if (!btn) return;
+      const act = btn.dataset.act;
+      if (ACT[act]) {
+        e.preventDefault();
+        ACT[act](btn, e);
+      }
+    });
+
+    document.addEventListener('submit', async (e) => {
+      const form = e.target.closest('form[data-form]');
+      if (!form) return;
+      e.preventDefault();
+      const fnName = form.dataset.form;
+      if (!FORMS[fnName]) return;
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Memproses...';
+      }
+
+      try {
+        await FORMS[fnName](form);
+      } catch (err) {
+        toast(err.message, true);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+    });
+
+    document.addEventListener('input', (e) => {
+      const form = e.target.closest('form[data-live]');
+      if (!form) return;
+      const fnName = form.dataset.live;
+      if (LIVE[fnName]) {
+        LIVE[fnName](form);
+      }
+    });
+  </script>
+</body>
+</html>
